@@ -1,0 +1,41 @@
+body {
+    font-family: 'Baloo Thambi', cursive;
+    margin: 0;
+    padding: 0;
+
+    color: rgb(87, 87, 87);
+}
+
+.success {
+    background-color: rgb(33, 185, 33);
+    color: white;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 80%;
+    font-size: 20px;
+}
+
+.button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    
+    width: auto;
+
+    background-color: white;
+    color: gray;
+
+    border: 2px solid gray;
+    border-radius: 5px;
+
+    font-size: 25px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.button:hover {
+    color: white;
+    background-color: gray;
+}

@@ -1,0 +1,14 @@
+.default-link-button {
+    text-decoration: none;
+    color: gray;
+
+    padding: 5px;
+    font-size: 20px;
+    border: 2px solid gray;
+    border-radius: 5px;
+}
+
+.default-link-button:hover {
+    background-color: gray;
+    color: white;
+}

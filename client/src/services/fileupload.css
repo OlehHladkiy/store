@@ -1,0 +1,28 @@
+.dropzone {
+    border: 2px solid rgb(107, 100, 100);
+    border-radius: 5px;
+
+    height: auto;
+    width: 81%;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dropzone-box {
+    margin: 10px;
+    width: 24%;
+    height: 180px;
+}
+
+.wrap {
+    font-size: 49px;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(182, 182, 182);
+}
+

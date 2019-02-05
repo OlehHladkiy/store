@@ -1,0 +1,76 @@
+.items-container {
+    height: 200px;
+    overflow-y: scroll;
+    width: 70%;
+
+    border: 2px solid gray;
+}
+
+.add-block {
+    display: flex;
+    justify-content: center;
+}
+
+.form-container {
+    width: 50%;   
+}
+
+.list-item {
+    color: white;
+    background-color: grey;
+    
+    font-size: 20px;
+
+    margin: 2px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    cursor: pointer;
+}
+
+.list-item.add {
+    justify-content: flex-start;
+    align-items: center;
+    color: rgb(207, 207, 207);
+    font-size: 25px;
+}
+
+.list-item-icon {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.list-item:hover {
+    background-color: rgb(160, 158, 158)
+}
+
+.list-item .icon { 
+    font-size: 15px;
+    color: rgb(170, 228, 170);
+
+    cursor: pointer;
+}
+
+.dialog-form {
+    width: 400px;
+
+    height: 210px;
+}
+
+.dialog-form .form-input {
+    width: 100%;
+}
+
+.dialog-actions {
+    display: flex;
+    width: 46%;
+    justify-content: space-around;
+
+    margin-left: 20px;
+}
+
+.add-block-container h2 {
+    text-align: center;
+}
