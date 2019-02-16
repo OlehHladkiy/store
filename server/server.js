@@ -31,7 +31,7 @@ cloudinary.config(
 
 const { Category } = require('./models/category');
 const { Brand } = require('./models/brand');
-const { Product } = require('./models/products');
+const { Product } = require('./models/product');
 const { User } = require('./models/user');
 
 //Midleware
@@ -135,6 +135,36 @@ app.get('/api/users/removeimage', auth, admin, (req, res) => {
 
 // PRODUCTS
 
+app.post('/api/product/shop', (req, res) => {
+    let order = req.body.order ? req.body.order : 'desc';
+    let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
+    let limit = req.body.limit ? parseInt(req.body.limit) : 100;
+    let skip = parseInt(req.body.skip);
+    let findArgs = {};    
+
+    for(let key in req.body.filters){
+        if(req.body.filters[key].length > 0){
+            findArgs[key] = req.body.filters[key];
+        }
+    }
+    
+    Product.
+    find(findArgs).
+    populate('category').
+    populate('brand').
+    sort([[sortBy]]).
+    skip(skip).
+    limit(limit).
+    exec((err, articles) => {
+        if(err) return res.status(400).send({err, success: false});
+        res.status(200).json({
+            success: true,
+            size: articles.length,
+            articles
+        })
+    })
+})
+
 app.post('/api/product/article', (req, res) => {
     const product = new Product(req.body);
 
@@ -199,7 +229,7 @@ app.post('/api/product/category', auth, admin, (req, res) => {
     });
 });
 
-app.get('/api/product/categories', auth, admin, (auth, res) => {
+app.get('/api/product/categories', (req, res) => {
     Category.find({}, (err, categories) => {
         if(err) return res.status(400).send({success: false, err});
         res.status(200).send({success: true, categories});
@@ -226,7 +256,25 @@ app.post('/api/product/updateCategory', auth, admin, (req, res) => {
     })
 })
 
+app.get('/api/product/articles_by_id', (req, res) => {
+    let type = req.query.type;
+    let items = req.query.id;
+    if(type === "array"){
+        let ids = req.query.id.split(',');
+        items = [];
+        items = ids.map(item => {
+            return mongoose.Types.ObjectId(item);
+        });
+    }
 
+    Product.
+    find({"_id": {$in: items}}).
+        populate('brands').
+        populate('categories').
+    exec((err, docs) => {
+        return res.status(200).send(docs);
+    });
+});
 
 
 const port = process.env.PORT || 3002;

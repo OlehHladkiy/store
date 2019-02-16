@@ -1,13 +1,19 @@
 import axios from 'axios';
-import { ADD_PRODUCT_SUCCESS, ADD_PRODUCT_CLEAR, ADD_PRODUCT_ERROR } from '../types';
+import { 
+    PRODUCT_ADD_SUCCESS, 
+    PRODUCT_ADD_CLEAR, 
+    PRODUCT_ADD_ERROR, 
+    PRODUCT_FROM_SERVER_SUCCESS, 
+    PRODUCT_FROM_SERVER_ERROR, 
+    PRODUCT_FROM_SERVER_LAUNCHED } from '../types';
 import { PRODUCT_SERVER } from '../services/linksApi';
 
 const addProductSuccess = () => ({
-    type: ADD_PRODUCT_SUCCESS
+    type: PRODUCT_ADD_SUCCESS
 })
 
 const addProductError = (message) => ({
-    type: ADD_PRODUCT_ERROR,
+    type: PRODUCT_ADD_ERROR,
     message
 })
 
@@ -23,6 +29,41 @@ export const addProduct = (dataToSubmit) => async dispatch => {
 
 export const addProductClear = () => dispatch => {
     dispatch({
-        type: ADD_PRODUCT_CLEAR
+        type: PRODUCT_ADD_CLEAR
     })
+}
+
+const productsFromServerSuccess = (articles) => ({
+    type: PRODUCT_FROM_SERVER_SUCCESS,
+    articles
+})
+
+const productsFromServerError = (errorMessage) => ({
+    type: PRODUCT_FROM_SERVER_ERROR,
+    errorMessage
+})
+
+const productsFromServerLaunched = () => ({
+    type: PRODUCT_FROM_SERVER_LAUNCHED
+})
+
+export const productsFromServer = (limit, skip, filters, previousData = []) => async (dispatch) => {
+    dispatch(productsFromServerLaunched());
+    const dataToSubmit = {
+        limit,
+        skip,
+        filters
+    }
+
+    const { data } = await axios.post(`${PRODUCT_SERVER}/shop`, dataToSubmit);
+    let newData = [
+        ...previousData,
+        ...data.articles
+    ]
+    
+    if(data.success){
+        dispatch(productsFromServerSuccess(newData));
+    } else {
+        dispatch(productsFromServerError(data.err.errmsg));
+    }
 }

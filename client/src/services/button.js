@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 
 import './button.css';
 
-const MyButton = ({type = "default", to, linkTo, className, text, runAction}) => {
+const MyButton = ({type = "default", linkTo, className, text, icon, runAction}) => {
 
     const renderButtons = () => {
         let template = null;
@@ -14,8 +14,16 @@ const MyButton = ({type = "default", to, linkTo, className, text, runAction}) =>
                                 className={className ? className : 'default-link-button'}
                                 to={linkTo}
                             >
-                                {text}
+                                {icon ? icon : null}{text}
                             </Link>);
+                break;
+            case 'addToCard':
+                template = (<button
+                    className={className ? className : 'default-link-button'}
+                    onClick={(event) => { event.stopPropagation(); runAction()} }
+                >
+                    {icon ? icon : null}{text}
+                </button>);
                 break;
             default:
                 template = null;
@@ -24,9 +32,9 @@ const MyButton = ({type = "default", to, linkTo, className, text, runAction}) =>
     }
 
     return (
-        <div>
+        <React.Fragment>
             {renderButtons()}
-        </div>
+        </React.Fragment>
     );
 }
 

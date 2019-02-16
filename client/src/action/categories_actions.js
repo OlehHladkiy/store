@@ -125,6 +125,7 @@ export const getCategories = () => async dispatch => {
     if(data.success){
         dispatch(getCategoriesSuccess(data.categories));
     } else {
+        console.log(data);
         dispatch(getCategoriesError(data.err));
     }
 }

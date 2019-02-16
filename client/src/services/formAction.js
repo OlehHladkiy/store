@@ -1,25 +1,23 @@
-const validate = (element, formData = []) => {
-    let error = [true, ''];
+export const validate = (element, formData = []) => {
+    let valid = true;
 
     if(element.validation.email){
-        const valid = /\S+@\S+\.\S+/.test(element.value);
-        const message = `${!valid ? 'Must be a valid email' : ''}`;
-        error = !valid ? [valid, message] : error;
+        valid = /\S+@\S+\.\S+/.test(element.value);
     }
 
     if(element.validation.required){
-        const valid = element.value !== '';
-        const message = `${!valid ? 'This field is required' : ''}`;
-        error = !valid ? [valid, message] : error;
+        valid = element.value !== '';
     }
 
     if(element.validation.confirm){
-        const valid = element.value.trim() === formData.password.value.trim();
-        const message = `${!valid ? 'Password must be the same' : ''}`;
-        error = !valid ? [valid, message] : error;
+        valid = element.value.trim() === formData.password.value.trim();
     }
 
-    return error;
+    if(element.validation.withAtrRequired){
+        valid = element.addedValues.length > 0;
+    }
+
+    return valid;
 }
 
 export const update = (element, formData) => {
@@ -28,14 +26,9 @@ export const update = (element, formData) => {
 
     newElement.value = element.event.target.value;
 
-    if(element.blur){
-        let validData = validate(newElement, formData);
+    let validData = validate(newElement, formData);
+    newElement.valid = validData;
 
-        newElement.valid = validData[0];
-        newElement.validationMessage = validData[1];
-    }
-
-    newElement.touched = element.blur;
     newFormData[element.id] = newElement;
 
     return newFormData;
@@ -44,7 +37,7 @@ export const update = (element, formData) => {
 export const generateData = (formData) => {
     let newData = {};
     for(let key in formData){
-        if(key !== 'confirmPassword'){
+        if(key !== 'confirmPassword' && !formData[key].validation.notToServer){
             newData[key] = formData[key].value;
         }
         if(key === 'phone'){
@@ -83,11 +76,22 @@ export const populateFields = (formData, dataIn) => {
 export const populateOptionFields = (formData, dataIn, field) => {
     const newFormData = {...formData};
     const newArray = dataIn.map(item => {
-        return {
-            key: item._id,
-            value: item.name
+        let obj = {};
+        for(let key in item){
+            if(key === 'name'){
+                obj['value'] = item[key];
+            } else if(key === '_id'){
+                obj['key'] = item[key];
+            } else {
+                obj[key] = item[key] 
+            }
         }
+        return obj;
     })
+    if(newFormData[field].validation.defaultFirstValue){
+        newFormData[field].value = newArray[0].key;
+        newFormData[field].valid = true;
+    }
     newFormData[field].config.options = newArray;
     return newFormData;
 }
@@ -96,11 +100,13 @@ export const resetFields = (formData) => {
     const newFormData = { ...formData };
 
     for(let key in newFormData){
-        newFormData[key].value = '';
-        newFormData[key].valid = false;
-        newFormData[key].touched = false;
-        if(newFormData[key].validation.withAtr){
-            newFormData[key].addedValues = [];
+        if(key !== 'images'){
+            newFormData[key].value = '';
+            newFormData[key].valid = false;
+            newFormData[key].touched = false;
+            if(newFormData[key].validation && newFormData[key].validation.withAtr){
+                newFormData[key].addedValues = [];
+            }
         }
     }
 

@@ -21,17 +21,28 @@
 }
 
 .plus-icon-button {
-    margin-top: 30px;
+    margin-top: 25px;
     width: 40px;
     height: 40px;
 
     margin-right: 7%;
-
+    cursor: pointer;
 
     border: none;
     border-radius: 50%;
-    background-color: rgb(192, 189, 189);
+    background-color: rgb(146, 146, 146);
     color: rgb(0, 0, 0);
+}
+
+.plus-icon-button:disabled {
+    background-color: rgb(192, 192, 192);
+    color: rgb(133, 133, 133);
+    cursor: default;
+}
+
+.plus-icon-button:disabled:hover {
+    background-color: rgb(192, 192, 192);
+    color: rgb(133, 133, 133);
 }
 
 .plus-icon-button:hover {

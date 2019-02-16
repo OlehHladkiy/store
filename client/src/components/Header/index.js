@@ -8,8 +8,7 @@ import faShoppingCart from '@fortawesome/fontawesome-free-solid/faShoppingCart';
 import faUserAlt from '@fortawesome/fontawesome-free-solid/faUserAlt';
 
 import AuthButton from './auth-button';
-import { logout } from '../../action/user_actions';
-import CircularProgress from '@material-ui/core/CircularProgress';  
+import { logout } from '../../action/user_actions'; 
 import './index.css';
 
 class Header extends Component {

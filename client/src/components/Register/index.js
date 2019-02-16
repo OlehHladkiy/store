@@ -29,7 +29,6 @@ class Register extends Component {
                     email: true
                 },
                 valid: false,
-                validatationMessage: '',
                 touched: false,
                 showLabel: true
             },
@@ -47,7 +46,6 @@ class Register extends Component {
                     required: true
                 },
                 valid: false,
-                validationMessage: '',
                 touched: false,
                 showLabel: true
             },
@@ -67,7 +65,6 @@ class Register extends Component {
                 },
                 valid: false,
                 touched: false,
-                validationMessage: '',
                 showLabel: true
             },
             name: {
@@ -84,7 +81,6 @@ class Register extends Component {
                     required: true
                 },
                 valid: false,
-                validationMessage: '',
                 touched: false,
                 showLabel: true
             },
@@ -102,7 +98,6 @@ class Register extends Component {
                     required: true
                 },
                 valid: false,
-                validationMessage: '',
                 touched: false,
                 showLabel: true
             },
@@ -127,15 +122,8 @@ class Register extends Component {
     onSubmit(event){
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
-        let validForm = formIsValid(this.state.formData);
 
-        if(validForm){
-            this.props.register(dataToSubmit);         
-        } else {
-            this.setState({
-                formError: true
-            })
-        }
+        this.props.register(dataToSubmit);         
     }
 
     updateForm(element){
@@ -185,7 +173,7 @@ class Register extends Component {
                                     <div className="success">
                                         Success
                                     </div>
-                                : <button type="submit" className="button" onClick={(event) => this.onSubmit(event)}>
+                                : <button type="submit" disabled={!formIsValid(this.state.formData)} className="button" onClick={(event) => this.onSubmit(event)}>
                                     Register
                                   </button>
                             }

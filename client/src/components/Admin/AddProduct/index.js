@@ -3,13 +3,15 @@ import UserLayout from '../../../hoc/userLayout';
 import { connect } from 'react-redux';
 import FormField from '../../../services/formField';
 import FileUpload from '../../../services/fileupload';
-import {update, generateData, formIsValid, resetFields, populateOptionFields} from '../../../services/formAction';
+import {update, generateData, formIsValid, resetFields, populateOptionFields, validate} from '../../../services/formAction';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
 import {getBrands, getCategories} from '../../../action/categories_actions';
 import {addProduct, addProductClear} from '../../../action/product_actions';
 
 import './index.css';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
 
 
 class AddProduct extends Component {
@@ -32,8 +34,6 @@ class AddProduct extends Component {
                     required: true
                 },
                 valid: false,
-                touched: false,
-                validatationMessage: '',
                 showLabel: true
             },
             description: {
@@ -50,8 +50,6 @@ class AddProduct extends Component {
                     required: true
                 },
                 valid: false,
-                touched: false,
-                validatationMessage: '',
                 showLabel: true
             },
             price: {
@@ -65,12 +63,11 @@ class AddProduct extends Component {
                     label: 'Price',
                 },
                 validation: {
-                    required: true
+                    required: false,
+                    notToServer: true
                 },
                 valid: false,
-                touched: false,
-                validationMessage: '',
-                showLabel: true
+                showLabel: false
             },
             category: {
                 element: 'select',
@@ -85,8 +82,6 @@ class AddProduct extends Component {
                     required: true
                 },
                 valid: false,
-                touched: false,
-                validationMessage: '',
                 showLabel: true
             },
             brand: {
@@ -102,8 +97,6 @@ class AddProduct extends Component {
                     required: true
                 },
                 valid: false,
-                touched: false,
-                validationMessage: '',
                 showLabel: true
             },
             tastes: {
@@ -119,31 +112,29 @@ class AddProduct extends Component {
                 },
                 validation: {
                     required: false,
-                    withAtr: true
+                    withAtr: true,
+                    withAtrRequired: true
                 },
-                valid: true,
-                touched: false,
-                validationMessage: '',
+                valid: false,
                 showLabel: true
             },
-            packing: {
+            packingAndPrice: {
                 element: 'input',
                 value: '',
                 addedValues: [],
-                key: 'packing',
+                key: 'packingAndPrice',
                 config: {
                     text: 'text',
-                    label: 'Packing',
+                    label: 'Packing and price (Example: 500g)',
                     name: 'packing-select',
                     placeholder: 'Enter packing values',
                 },
                 validation: {
                     required: false,
-                    withAtr: true
+                    withAtr: true,
+                    withAtrRequired: true
                 },
-                valid: true,
-                touched: false,
-                validationMessage: '',
+                valid: false,
                 showLabel: true
             },
             available: {
@@ -159,35 +150,36 @@ class AddProduct extends Component {
                     required: true
                 },
                 valid: false,
-                touched: false,
-                validationMessage: '',
                 showLabel: true
             },
             images: {
                 value: [],
                 validation: {
-                    require: false
+                    required: false
                 },
                 valid: true,
-                touched: false,
-                validationMessage: '',
                 showLabel: false
             }
-        }
+        },
+        openDialog: false
+    }
+
+    handleDialogOpen = () => {
+        this.setState({
+            openDialog: true
+        })
+    }
+
+    handleDialogClose = () => {
+        this.setState({
+            openDialog: false
+        })
     }
 
     onSubmit(event){
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
-        let validForm = formIsValid(this.state.formData);
-
-        if(validForm){
-            this.props.addProduct(dataToSubmit);
-        } else {
-            this.setState({
-                formError: true
-            })
-        }
+        this.props.addProduct(dataToSubmit);
     }
 
     updateForm(element){
@@ -199,17 +191,23 @@ class AddProduct extends Component {
         })
     }
 
-    pushAtribute = (type) => {
+    pushAtribute = (type, withPrice) => {
         const newFormData = {...this.state.formData};
-        if(newFormData[type].value !== ''){
-            const addedValuesCopy = [...newFormData[type].addedValues, {_id: +new Date, value: newFormData[type].value}];
-            newFormData[type].value = '';
-            newFormData[type].addedValues = addedValuesCopy;
-
-            this.setState({
-                formData: newFormData
-            })
+        let value = newFormData[type].value;
+        let obj = {_id: `${value.split(' ').join('-')}-${+new Date()}`, name: value};
+        if(withPrice){
+            obj = {...obj, price: this.state.formData.price.value}
         }
+
+        const addedValuesCopy = [...newFormData[type].addedValues, obj];
+        newFormData[type].value = '';
+        newFormData[type].addedValues = addedValuesCopy;
+        newFormData[type].valid = validate(newFormData[type], newFormData);
+        
+        this.setState({
+            formData: newFormData,
+            openDialog: false
+        })
     }
 
     deleteAtribute(id, type){
@@ -217,6 +215,7 @@ class AddProduct extends Component {
         let index = newFormData[type].addedValues.findIndex(item => item._id === id);
         let newArray = [...newFormData[type].addedValues.slice(0, index), ...newFormData[type].addedValues.slice(index + 1)];
         newFormData[type].addedValues = newArray;
+        newFormData[type].valid = validate(newFormData[type], newFormData);
         
         this.setState({
             formData: newFormData
@@ -252,7 +251,7 @@ class AddProduct extends Component {
                         this.setState({formSuccess: false});
                         this.props.addProductClear();
                     }, 3000)
-                } else {
+                } else if(nextProps.addProductSuccess === false) {
                     this.setState({
                         formError: true
                     })
@@ -275,6 +274,7 @@ class AddProduct extends Component {
     }
 
     render() {
+        console.log(this.state);
         return (
             <UserLayout {...this.props}>
                 <div className="add-product">
@@ -288,7 +288,6 @@ class AddProduct extends Component {
                                 />
                                 <FormField formData={this.state.formData.name} change={(element) => this.updateForm(element)}/>    
                                 <FormField formData={this.state.formData.description} change={(element) => this.updateForm(element)}/>
-                                <FormField formData={this.state.formData.price} change={(element) => this.updateForm(element)}/>
                                 <FormField formData={this.state.formData.category} change={(element) => this.updateForm(element)}/>
                                 <FormField formData={this.state.formData.brand} change={(element) => this.updateForm(element)}/>
                                 {   
@@ -297,7 +296,7 @@ class AddProduct extends Component {
                                             {   
                                                 this.state.formData.tastes.addedValues.map(item => (
                                                     <div key={item._id} className="add-atribute">
-                                                        {item.value}
+                                                        {item.name}
                                                         <FontAwesomeIcon onClick={() => this.deleteAtribute(item._id, 'tastes')} icon={faPlus} className="icon-delete-atribute"/>
                                                     </div>
                                                 ))
@@ -307,15 +306,15 @@ class AddProduct extends Component {
                                 }
                                 <div className="add-atributes">
                                     <FormField formData={this.state.formData.tastes} change={(element) => this.updateForm(element)}/>
-                                    <button onClick={() => this.pushAtribute('tastes')} type="button" className="plus-icon-button"><FontAwesomeIcon icon={faPlus}/></button>
+                                    <button onClick={() => this.pushAtribute('tastes')} disabled={this.state.formData.tastes.value === ''} type="button" className="plus-icon-button"><FontAwesomeIcon icon={faPlus}/></button>
                                 </div>
                                 {   
-                                    this.state.formData.packing.addedValues.length > 0 ?
+                                    this.state.formData.packingAndPrice.addedValues.length > 0 ?
                                         <div className="add-atribute-container">
                                             {   
-                                                this.state.formData.packing.addedValues.map(item => (
+                                                this.state.formData.packingAndPrice.addedValues.map(item => (
                                                     <div key={item._id} className="add-atribute">
-                                                        {item.value}
+                                                        {item.name} - {item.price}$
                                                         <FontAwesomeIcon onClick={() => this.deleteAtribute(item._id, 'packing')} icon={faPlus} className="icon-delete-atribute"/>
                                                     </div>
                                                 ))
@@ -324,11 +323,11 @@ class AddProduct extends Component {
                                     : null
                                 }
                                 <div className="add-atributes">
-                                    <FormField formData={this.state.formData.packing} change={(element) => this.updateForm(element)}/>
-                                    <button onClick={() => this.pushAtribute('packing')} type="button" className="plus-icon-button"><FontAwesomeIcon icon={faPlus}/></button>
+                                    <FormField formData={this.state.formData.packingAndPrice} change={(element) => this.updateForm(element)}/>
+                                    <button onClick={this.handleDialogOpen} disabled={this.state.formData.packingAndPrice.value === ''} type="button" className="plus-icon-button"><FontAwesomeIcon icon={faPlus}/></button>
                                 </div>
                                 <FormField formData={this.state.formData.available} change={(element) => this.updateForm(element)}/>
-                                <button type="submit" className="button" onClick={(event) => this.onSubmit(event)}>
+                                <button type="submit" disabled={!formIsValid(this.state.formData)} className="button" onClick={(event) => this.onSubmit(event)}>
                                     Add Product
                                 </button>
                                 {
@@ -349,6 +348,20 @@ class AddProduct extends Component {
                         </div>
                     </div>
                 </div>
+                <Dialog open={this.state.openDialog} onClose={this.handleDialogClose}>
+                    <span>Price for {this.state.formData.packingAndPrice.value}</span>
+                    <DialogContent>
+                        <FormField formData={this.state.formData.price} change={(element) => this.updateForm(element)}/>
+                    </DialogContent>
+                    <div className="dialog-actions">
+                        <button type="button" disabled={this.state.formData.price.value === ''} className="button" onClick={() => this.pushAtribute('packingAndPrice', true)}>
+                            Ok 
+                        </button>
+                        <button type="button" className="button" onClick={this.handleDialogClose}>
+                            Cancel
+                        </button>
+                    </div>
+                </Dialog>
             </UserLayout>
         )
     }

@@ -28,7 +28,6 @@ class Login extends Component {
                     email: true
                 },
                 valid: false,
-                validatationMessage: '',
                 showLabel: true
             },
             password: {
@@ -45,7 +44,6 @@ class Login extends Component {
                     required: true
                 },
                 valid: false,
-                validationMessage: '',
                 showLabel: true
             }
         },
@@ -55,18 +53,11 @@ class Login extends Component {
     onSubmit(event){
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
-        let validForm = formIsValid(this.state.formData);
 
-        if(validForm){
-            this.props.login(dataToSubmit);
-            this.setState({
-                loading: true
-            })
-        } else {
-            this.setState({
-                formError: true
-            })
-        }
+        this.props.login(dataToSubmit);
+        this.setState({
+            loading: true
+        })
     }
 
     updateForm(element){
@@ -121,7 +112,7 @@ class Login extends Component {
                         <form className="login-form" onSubmit={(event) => this.onSubmit(event)}>
                             <FormField formData={this.state.formData.email} change={(element) => this.updateForm(element)}/>    
                             <FormField formData={this.state.formData.password} change={(element) => this.updateForm(element)}/>
-                            <button type="submit" className="button" onClick={(event) => this.onSubmit(event)}>
+                            <button type="submit" className="button" disabled={!formIsValid(this.state.formData)} onClick={(event) => this.onSubmit(event)}>
                                 Login
                             </button>
                             {

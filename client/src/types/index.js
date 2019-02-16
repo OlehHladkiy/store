@@ -39,6 +39,14 @@ export const PRODUCT_UPDATE_CATEGORY_SUCCESS = "product_update_category_success"
 
 // Product 
 
-export const ADD_PRODUCT_SUCCESS = "add_product_success";
-export const ADD_PRODUCT_ERROR = "add_product_error";
-export const ADD_PRODUCT_CLEAR = "add_product_clear";
+export const PRODUCT_ADD_SUCCESS = "product_add_success";
+export const PRODUCT_ADD_ERROR = "product_add_error";
+export const PRODUCT_ADD_CLEAR = "product_add_clear";
+export const PRODUCT_FROM_SERVER_SUCCESS = "product_from_server_success";
+export const PRODUCT_FROM_SERVER_ERROR = "product_from_server_error";
+export const PRODUCT_FROM_SERVER_LAUNCHED = "product_from_server_launched";
+
+// buy dialog
+
+export const OPEN_DIALOG = "open_dialog";
+export const CLOSE_DIALOG = "close_dialog";

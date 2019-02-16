@@ -25,8 +25,6 @@ export default class UpdateDialog extends Component {
                     required: true
                 },
                 valid: false,
-                validationMessage: '',
-                touched: false,
                 showLabel: true
             }
         }
@@ -35,17 +33,10 @@ export default class UpdateDialog extends Component {
     onSubmit(event){
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
-        let validForm = formIsValid(this.state.formData);
 
-        if(validForm){
-            this.props.action(dataToSubmit, this.props.data, this.props.id);
-            this.props.handleClose();
-            resetFields(this.state.formData);
-        } else {
-            this.setState({
-                formError: true
-            })
-        }
+        this.props.action(dataToSubmit, this.props.data, this.props.id);
+        this.props.handleClose();
+        resetFields(this.state.formData);
     }
     
     updateForm(element){
@@ -64,6 +55,7 @@ export default class UpdateDialog extends Component {
                 let newFormData = {...this.state.formData};
                 let newElement = {...newFormData.name};
                 newElement.value = nextProps.data[index].name;
+                newElement.valid = true;
                 newFormData.name = newElement;
 
                 this.setState({
@@ -85,7 +77,7 @@ export default class UpdateDialog extends Component {
                         <FormField formData={this.state.formData.name} change={(element) => this.updateForm(element)}/>
                     </DialogContent>
                     <div className="dialog-actions">
-                        <button type="submit" className="button" onClick={(event) => this.onSubmit(event, 'update')}>
+                        <button type="submit" disabled={!formIsValid(this.state.formData)} className="button" onClick={(event) => this.onSubmit(event, 'update')}>
                             {this.props.nameOfButton} 
                         </button>
                         <button type="button" className="button" onClick={this.props.handleClose}>

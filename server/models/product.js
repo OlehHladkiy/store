@@ -12,11 +12,6 @@ const productSchema = mongoose.Schema({
         type: String,
         maxlength: 100000
     },
-    price: {
-        required: true,
-        type: Number,
-        maxlength: 255
-    },
     category: {
         type: Schema.Types.ObjectId,
         ref: 'Category',
@@ -32,7 +27,7 @@ const productSchema = mongoose.Schema({
         type: Array,
         default: []
     },
-    packing: {
+    packingAndPrice: {
         required: true,
         type: Array,
         default: []

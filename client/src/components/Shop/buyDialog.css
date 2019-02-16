@@ -1,0 +1,59 @@
+
+.buy-dialog {
+    width: 500px;
+    height: 400px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 25px;
+}
+
+.dialog-header {
+    height: 10%;
+    margin-right: -25px;
+    margin-left: -25px;
+
+    border-bottom: 2px solid rgb(68, 68, 68);
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+}
+
+.close-icon {
+    font-size: 25px;
+    width: 50px;
+    height: 100%;
+    text-align: center;
+}
+
+.close-icon-text:hover {
+    cursor: pointer;
+    color: black;
+}
+
+.dialog-header-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.dialog-content {
+
+}
+
+.dialog-image-section {
+    height: 120px;
+    margin: 10px;
+
+    display: flex;
+}
+
+.buy-dialog .form-select {
+    height: 30px;
+    width: 100%;
+}
+
+.price {
+    font-size: 30px;
+    color: rgb(71, 71, 71);
+}

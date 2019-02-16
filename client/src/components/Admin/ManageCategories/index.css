@@ -51,6 +51,8 @@
     color: rgb(170, 228, 170);
 
     cursor: pointer;
+    padding-right: 15px;
+    padding-top: 8px;
 }
 
 .dialog-form {

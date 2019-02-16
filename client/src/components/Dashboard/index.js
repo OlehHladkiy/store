@@ -28,7 +28,6 @@ class Dashboard extends Component {
                     email: true
                 },
                 valid: false,
-                validatationMessage: '',
                 touched: false,
                 showLabel: true
             },
@@ -46,7 +45,6 @@ class Dashboard extends Component {
                     required: true
                 },
                 valid: false,
-                validationMessage: '',
                 touched: false,
                 showLabel: true
             },
@@ -64,7 +62,6 @@ class Dashboard extends Component {
                     required: true
                 },
                 valid: false,
-                validationMessage: '',
                 touched: false,
                 showLabel: true
             },
@@ -171,7 +168,7 @@ class Dashboard extends Component {
                             {
                                 !this.state.edit ? 
                                     <button type="button" className="button" onClick={(event) => { event.preventDefault(); this.onToggleEdit() }}>Edit</button>
-                                : <button type="submit" className="button" onClick={(event) => this.onSubmit(event)}>Save</button>
+                                : <button type="submit" className="button" disabled={!formIsValid(this.state.formData)} onClick={(event) => this.onSubmit(event)}>Save</button>
                             }
                             {
                                 this.state.formError ? 

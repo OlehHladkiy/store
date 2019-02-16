@@ -4,7 +4,6 @@ import InputMask from 'react-input-mask';
 
 const FormField = (props) => {
     const {formData, change, classNameChildElem, readOnly} = props;
-
     const renderError = () => {
         let errorMessage = null;
         
@@ -46,7 +45,7 @@ const FormField = (props) => {
                     <div className="form-block">
                         {formData.showLabel ? formData.config.label : null}
                         <select className="form-select" value={formData.value} onBlur={(event) => change({event, id: formData.key, blur: true})} onChange={(event) => change({event, id: formData.key})}>
-                            <option value="">Select one</option>
+                            {formData.validation.defaultFirstValue ? null : <option value="">Select one</option>}
                             {
                                 formData.config.options.map((item) => (
                                     <option key={item.key} value={item.key}>

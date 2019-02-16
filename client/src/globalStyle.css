@@ -39,3 +39,10 @@ body {
     color: white;
     background-color: gray;
 }
+
+.button:disabled {
+    background-color: rgb(255, 255, 255);
+    color: rgb(185, 185, 185);
+    cursor: default;
+    border: 2px solid rgb(170, 170, 170);
+}

@@ -1,0 +1,8 @@
+.list-item-checkbox {
+    cursor: pointer;
+    height: 50px;
+}
+
+.list-item-checkbox:hover {
+    background-color: rgb(240, 240, 240);
+}

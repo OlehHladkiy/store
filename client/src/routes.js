@@ -4,10 +4,23 @@ import Auth from './hoc/auth';
 import Layout from './hoc/layout';
 import Login from './components/Login';
 import Register from './components/Register';
-import Home from './components/Home';
+import Shop from './components/Shop';
 import Dashboard from './components/Dashboard';
 import ManageCategories from './components/Admin/ManageCategories';
 import AddProduct from './components/Admin/AddProduct';
+
+class Test extends Component {
+    render(){
+        return (
+            <select>
+                <option></option>
+                <option></option>
+                <option></option>
+                <option></option>
+            </select>
+        )
+    }
+}
 
 const Routes = () => {
     return (
@@ -20,7 +33,8 @@ const Routes = () => {
 
                 <Route path="/login" exact component={Auth(Login, false)}/>
                 <Route path="/register" exact component={Auth(Register, false)}/>
-                <Route path="/" exact component={Auth(Home, null)}/>
+                <Route path="/" exact component={Auth(Shop, null)}/>
+                <Route path="/test" exact component={Test}/>
             </Switch>
         </Layout>
     )
