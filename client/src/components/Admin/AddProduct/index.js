@@ -1,18 +1,9 @@
 import React, { Component } from 'react';
-import UserLayout from '../../../hoc/userLayout';
 import { connect } from 'react-redux';
-import FormField from '../../../services/formField';
-import FileUpload from '../../../services/fileupload';
 import {update, generateData, formIsValid, resetFields, populateOptionFields, validate} from '../../../services/formAction';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
 import {getBrands, getCategories} from '../../../action/categories_actions';
 import {addProduct, addProductClear} from '../../../action/product_actions';
-
-import './index.css';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-
+import AddProductPresentational from './addProductPresentational';
 
 class AddProduct extends Component {
 
@@ -175,13 +166,13 @@ class AddProduct extends Component {
         })
     }
 
-    onSubmit(event){
+    onSubmit = (event) => {
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
         this.props.addProduct(dataToSubmit);
     }
 
-    updateForm(element){
+    updateForm = (element) => {
         const newFormData = update(element, this.state.formData);
 
         this.setState({
@@ -209,7 +200,7 @@ class AddProduct extends Component {
         })
     }
 
-    deleteAtribute(id, type){
+    deleteAtribute = (id, type) => {
         const newFormData = {...this.state.formData};
         let index = newFormData[type].addedValues.findIndex(item => item._id === id);
         let newArray = [...newFormData[type].addedValues.slice(0, index), ...newFormData[type].addedValues.slice(index + 1)];
@@ -277,95 +268,21 @@ class AddProduct extends Component {
     }
 
     render() {
-        console.log(this.state);
         return (
-            <UserLayout {...this.props}>
-                <div className="add-product">
-                    <div className="add-product-container">
-                        <h2>Add product</h2>
-                        <div className="add-product-form-container">
-                            <form className="login-form" onSubmit={(event) => this.onSubmit(event)}>
-                                <FileUpload 
-                                    imagesHandler={(images) => this.imagesHandler(images)}
-                                    reset={this.state.formSuccess}
-                                />
-                                <FormField formData={this.state.formData.name} change={(element) => this.updateForm(element)}/>    
-                                <FormField formData={this.state.formData.description} change={(element) => this.updateForm(element)}/>
-                                <FormField formData={this.state.formData.category} change={(element) => this.updateForm(element)}/>
-                                <FormField formData={this.state.formData.brand} change={(element) => this.updateForm(element)}/>
-                                {   
-                                    this.state.formData.tastes.addedValues.length > 0 ?
-                                        <div className="add-atribute-container">
-                                            {   
-                                                this.state.formData.tastes.addedValues.map(item => (
-                                                    <div key={item._id} className="add-atribute">
-                                                        {item.name}
-                                                        <FontAwesomeIcon onClick={() => this.deleteAtribute(item._id, 'tastes')} icon={faPlus} className="icon-delete-atribute"/>
-                                                    </div>
-                                                ))
-                                            }
-                                        </div>
-                                    : null
-                                }
-                                <div className="add-atributes">
-                                    <FormField formData={this.state.formData.tastes} change={(element) => this.updateForm(element)}/>
-                                    <button onClick={() => this.pushAtribute('tastes')} disabled={this.state.formData.tastes.value === ''} type="button" className="plus-icon-button"><FontAwesomeIcon icon={faPlus}/></button>
-                                </div>
-                                {   
-                                    this.state.formData.packingAndPrice.addedValues.length > 0 ?
-                                        <div className="add-atribute-container">
-                                            {   
-                                                this.state.formData.packingAndPrice.addedValues.map(item => (
-                                                    <div key={item._id} className="add-atribute">
-                                                        {item.name} - {item.price}$
-                                                        <FontAwesomeIcon onClick={() => this.deleteAtribute(item._id, 'packing')} icon={faPlus} className="icon-delete-atribute"/>
-                                                    </div>
-                                                ))
-                                            }
-                                        </div>
-                                    : null
-                                }
-                                <div className="add-atributes">
-                                    <FormField formData={this.state.formData.packingAndPrice} change={(element) => this.updateForm(element)}/>
-                                    <button onClick={this.handleDialogOpen} disabled={this.state.formData.packingAndPrice.value === ''} type="button" className="plus-icon-button"><FontAwesomeIcon icon={faPlus}/></button>
-                                </div>
-                                <FormField formData={this.state.formData.available} change={(element) => this.updateForm(element)}/>
-                                <button type="submit" disabled={!formIsValid(this.state.formData)} className="button" onClick={(event) => this.onSubmit(event)}>
-                                    Add Product
-                                </button>
-                                {
-                                    this.state.formError ? 
-                                        <div className='error-message'>
-                                            {this.props.errorMessageAddProduct ? this.props.errorMessageAddProduct : 'wrong data!'}
-                                        </div>
-                                    : null
-                                }
-                                {
-                                    this.state.formSuccess ?
-                                        <div className="success">
-                                            Success
-                                        </div>
-                                    : null
-                                }
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <Dialog open={this.state.openDialog} onClose={this.handleDialogClose}>
-                    <span>Price for {this.state.formData.packingAndPrice.value}</span>
-                    <DialogContent>
-                        <FormField formData={this.state.formData.price} change={(element) => this.updateForm(element)}/>
-                    </DialogContent>
-                    <div className="dialog-actions">
-                        <button type="button" disabled={this.state.formData.price.value === ''} className="button" onClick={() => this.pushAtribute('packingAndPrice', true)}>
-                            Ok 
-                        </button>
-                        <button type="button" className="button" onClick={this.handleDialogClose}>
-                            Cancel
-                        </button>
-                    </div>
-                </Dialog>
-            </UserLayout>
+            <AddProductPresentational
+                {...this.props}
+                updateForm={this.updateForm}
+                onSubmit={this.onSubmit}
+                formData={this.state.formData}
+                formError={this.state.formError}
+                formSuccess={this.state.formSuccess}
+                imagesHandler={this.imagesHandler}
+                deleteAtribute={this.deleteAtribute}
+                pushAtribute={this.pushAtribute}
+                handleDialogClose={this.handleDialogClose}
+                handleDialogOpen={this.handleDialogOpen}
+                openDialog={this.state.openDialog}
+            />
         )
     }
 }
