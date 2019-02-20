@@ -18,7 +18,7 @@ export default function(state = {}, action){
         case PRODUCT_FROM_SERVER_LAUNCHED: 
             return { ...state, isFetchingArticles: true }
         case PRODUCT_FROM_SERVER_SUCCESS:
-            return { ...state,  isFetchingArticles: false, articles: action.articles }
+            return { ...state,  isFetchingArticles: false, articles: action.articles, articlesSize: action.articlesSize }
         case PRODUCT_FROM_SERVER_ERROR:
             return { ...state, isFetchingArticles: false, errorMessage: action.errorMessage }
         default:

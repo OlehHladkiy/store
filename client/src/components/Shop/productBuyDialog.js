@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Dialog } from '@material-ui/core';
 import {update, generateData, formIsValid, populateOptionFields, resetFields} from '../../services/formAction';
-import FormField from '../../services/formField';
 import {connect} from 'react-redux';
-import {closeDialog} from '../../action/buy_dialog_actions';
+import {closeBuyDialog} from '../../action/dialogs_actions';
+import {addToCart} from '../../action/cart_actions';
+import ProductBuyDialogPresentational from './productBuyDialogPresentational';
 
 import './buyDialog.css';
 
@@ -48,14 +48,15 @@ class ProductBuyDialog extends Component {
         }
     }
 
-    onSubmit(event){
+    onSubmit = (event) => {
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
 
-        
+        this.props.addToCart(this.props.article, dataToSubmit);
+        this.props.closeBuyDialog();
     }
 
-    updateForm(element){
+    updateForm = (element) => {
         const newFormData = update(element, this.state.formData);
 
         this.setState({
@@ -65,7 +66,7 @@ class ProductBuyDialog extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        if(this.props !== nextProps){
+        if(this.props.openDialogStatus !== nextProps.openDialogStatus){
             if(nextProps.article){
                 let newFormData = {};
                 const formDataWithNewTaste = populateOptionFields(this.state.formData, nextProps.article.tastes, 'tastes');
@@ -98,51 +99,21 @@ class ProductBuyDialog extends Component {
 
     render() {
         return (
-            this.props.article ? 
-                <Dialog open={this.props.openDialogStatus} onClose={this.props.closeDialog}>
-                    <div className="buy-dialog">
-                        <div className="dialog-header">
-                            <span className="dialog-header-name">{this.props.article.name}</span>
-                            <div className="close-icon">
-                                <span className="close-icon-text" onClick={() => this.props.closeDialog()}>x</span>
-                            </div>
-                        </div>
-                        <div className="dialog-content">
-                            <div className="dialog-image-section">
-                                <div></div>
-                                <div>
-                                    {/* {this.props.article.brand.name}<br/>
-                                    {this.props.article.category.name} */}
-                                </div>
-                            </div>
-                            <form className="" onSubmit={(event) => this.onSubmit(event)}>
-                                <FormField formData={this.state.formData.tastes} change={(element) => this.updateForm(element)}/>
-                                <FormField formData={this.state.formData.packingAndPrice} change={(element) => this.updateForm(element)}/>
-                                <button type="submit" disabled={!formIsValid(this.state.formData)} className="button" onClick={(event) => this.onSubmit(event)}>
-                                    Add to Card
-                                </button>
-                                {
-                                    this.state.formError ? 
-                                        <div className='error-message'>
-                                            {this.props.errorMessageAddProduct ? this.props.errorMessageAddProduct : 'wrong data!'}
-                                        </div>
-                                    : null
-                                }
-                            </form>
-                            <div className="dialog-price-container">
-                                {this.renderPrice()}
-                            </div>
-                        </div>
-                    </div>
-                </Dialog>
-            : null
+            <ProductBuyDialogPresentational
+                {...this.props}
+                updateForm={this.updateForm}
+                onSubmit={this.onSubmit}
+                formData={this.state.formData}
+                formError={this.state.formError}
+                renderPrice={this.renderPrice}
+            />
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    openDialogStatus: state.buyDialog.openDialogStatus,
-    article: state.buyDialog.article
+    openDialogStatus: state.dialogs.openDialogStatus,
+    article: state.dialogs.article
 })
 
-export default connect(mapStateToProps, {closeDialog})(ProductBuyDialog);
+export default connect(mapStateToProps, {closeBuyDialog, addToCart})(ProductBuyDialog);

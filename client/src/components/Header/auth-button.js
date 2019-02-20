@@ -33,8 +33,10 @@ class AuthButton extends Component {
 
     componentWillReceiveProps(nextProps){
         if(this.props.isFetching !== nextProps.isFetching){
-            if(nextProps.successLogout){
-                nextProps.history.push('/');
+            if(nextProps.isFetching === false){
+                if(nextProps.successLogout){
+                    nextProps.history.push('/');
+                }
             }
         }
     }
@@ -45,7 +47,7 @@ class AuthButton extends Component {
         let isAuth = userData.isAuth;
         
         return (
-            <div>
+            <>
                 <div className="header--auth header-btn" onClick={isAuth ? this.handleClick : this.redirectToLogin}>
                     <FontAwesomeIcon icon={this.props.icon} className="header--icon user-icon"/>
                         {
@@ -66,7 +68,7 @@ class AuthButton extends Component {
                         </Menu>
                     : null
                 }
-            </div>
+            </>
         )
     }
 }

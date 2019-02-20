@@ -63,7 +63,6 @@ class AddProduct extends Component {
                     label: 'Price',
                 },
                 validation: {
-                    required: false,
                     notToServer: true
                 },
                 valid: false,
@@ -234,15 +233,19 @@ class AddProduct extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        if(this.props !== nextProps){
+        if(this.props.isFetchingBrands !== nextProps.isFetchingBrands){
             if(nextProps.isFetchingBrands === false){
                 const newFormData = populateOptionFields(this.state.formData, nextProps.brands, 'brand');
                 this.updateFormData(newFormData);
             }
+        }
+        if(this.props.isFetchingCategories !== nextProps.isFetchingCategories){
             if(nextProps.isFetchingCategories === false){
                 const newFormData = populateOptionFields(this.state.formData, nextProps.categories, 'category');
                 this.updateFormData(newFormData);
             }
+        }
+        if(this.props.isFetchingAddProduct !== nextProps.isFetchingAddProduct){
             if(nextProps.isFetchingAddProduct === false){
                 if(nextProps.addProductSuccess === true){
                     this.setState({formSuccess: true});

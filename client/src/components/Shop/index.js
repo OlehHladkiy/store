@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import CollapseCheckbox from '../../services/collapseCheckbox';
 import {connect} from 'react-redux';
 import {getBrands, getCategories} from '../../action/categories_actions';
 import {productsFromServer} from '../../action/product_actions';
-import CircularProgress from '@material-ui/core/CircularProgress'; 
-import ProductBuyDialog from './productBuyDialog';
-import RenderProduct from './renderProducts';
-import './index.css';
+import ShopPresentational from './shopPresentational';
 
 class Shop extends Component {
     state = {
@@ -29,7 +25,7 @@ class Shop extends Component {
         );
     }
 
-    applyFilters(filters, key){
+    applyFilters = (filters, key) => {
         const newFilters = {...this.state.filters};
         newFilters[key] = filters;
 
@@ -67,31 +63,12 @@ class Shop extends Component {
 
     render() {
         return (
-            <div className="main-content shop">
-                <div className="user-menu">
-                    <div className="stepper">
-                        Browse products
-                    </div>
-                    <CollapseCheckbox
-                        list={this.props.categories}
-                        title="category"
-                        initOpen={true}
-                        applyFilters={(filters) => this.applyFilters(filters, 'category')}
-                    />
-                    <CollapseCheckbox
-                        list={this.props.brands}
-                        initOpen={false}
-                        title="brands"
-                        applyFilters={(filters) => this.applyFilters(filters, 'brand')}
-                    />
-                </div>
-                <RenderProduct 
-                    skip={this.state.skip} 
-                    articles={this.props.articles} 
-                    loadArticles={this.loadArticles}
-                    />
-                <ProductBuyDialog/>
-            </div>
+            <ShopPresentational
+                {...this.props}
+                loadArticles={this.loadArticles}
+                applyFilters={this.applyFilters}
+                limit={this.state.limit}
+            />
         )   
     }
 }
@@ -100,6 +77,7 @@ const mapStateToProps = (state) => ({
     brands: state.kindOfCategory.brands,
     categories: state.kindOfCategory.categories,
     articles: state.product.articles,
+    articlesSize: state.product.articlesSize,
     isFetchingArticles: state.product.isFetchingArticles,
     errorMessage: state.product.errorMessage
 })  

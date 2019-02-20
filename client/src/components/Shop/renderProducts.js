@@ -16,27 +16,29 @@ const RenderProduct = (props) => {
 
     return (
         <div className="content">
+            {
+                props.articles && props.articles.length === 0 ?
+                    <div className="no-result">
+                        No Result
+                    </div>
+                :
+                <>
+                    <div className="articles-container">
+                        {
+                            renderProducts()
+                        }
+                    </div>
                     {
-                        props.articles && props.articles.length === 0 ?
-                            <div className="no-result">
-                                No Result
+                        props.articles ?
+                            props.size < props.limit ? null :
+                            <div className="more-btn" onClick={() => props.loadArticles()}>
+                                More
                             </div>
-                        :
-                        <React.Fragment>
-                            <div className="articles-container">
-                                {
-                                    renderProducts()
-                                }
-                            </div>
-                            {
-                                props.articles && props.articles.length < props.skip ? null :
-                                <div className="more-btn" onClick={() => props.loadArticles()}>
-                                    More
-                                </div>
-                            }
-                        </React.Fragment>
+                        : <CircularProgress color="primary"/>
                     }
-                </div>
+                </>
+            }
+        </div>
     );
 }
 

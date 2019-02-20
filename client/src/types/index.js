@@ -46,7 +46,19 @@ export const PRODUCT_FROM_SERVER_SUCCESS = "product_from_server_success";
 export const PRODUCT_FROM_SERVER_ERROR = "product_from_server_error";
 export const PRODUCT_FROM_SERVER_LAUNCHED = "product_from_server_launched";
 
+// Cart
+
+export const CART_ITEM_ADD_SUCCESS = "cart_item_add_success";
+export const CART_ITEM_CLEAR = "cart_item_clear";
+export const CART_ITEM_DELETE_SUCCESS = "cart_item_delete_success";
+export const CART_GET_ITEMS_SUCCESS = "cart_get_items_success";
+export const AMOUNT_CART_ITEMS = "amount_cart_items";
+
 // buy dialog
 
-export const OPEN_DIALOG = "open_dialog";
-export const CLOSE_DIALOG = "close_dialog";
+export const OPEN_BUY_DIALOG = "open_buy_dialog";
+export const CLOSE_BUY_DIALOG = "close_buy_dialog";
+
+export const OPEN_CART_DIALOG = "open_cart_dialog";
+export const CLOSE_CART_DIALOG = "close_cart_dialog";
+

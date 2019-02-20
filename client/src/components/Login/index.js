@@ -2,11 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { login } from '../../action/user_actions';
 
-import FormField from '../../services/formField';
-import {update, generateData, formIsValid} from '../../services/formAction';
-import CircularProgress from '@material-ui/core/CircularProgress';  
-import MyButton from '../../services/button';
-import './index.css';
+import {update, generateData} from '../../services/formAction';
+import LoginPresentational from './loginPresentational';
 
 class Login extends Component {
     state = {
@@ -50,7 +47,7 @@ class Login extends Component {
         loading: false
     }
 
-    onSubmit(event){
+    onSubmit = (event) => {
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
 
@@ -60,7 +57,7 @@ class Login extends Component {
         })
     }
 
-    updateForm(element){
+    updateForm = (element) => {
         const newFormData = update(element, this.state.formData);
 
         this.setState({
@@ -70,7 +67,7 @@ class Login extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        if(this.props !== nextProps){
+        if(this.props.isFetchingLogin !== nextProps.isFetchingLogin){
             if(nextProps.isFetchingLogin === false){
                 this.setState({
                     loading: false
@@ -86,46 +83,16 @@ class Login extends Component {
     }
 
     render() {
-        if(this.state.loading){
-            return (
-                <div className="loader">
-                    <CircularProgress color="secondary"/>
-                </div>
-            )
-        }
         return (
-            <div className="login">
-                <div className="login-container">
-                    <div className="new-customers">
-                        <div className="customers-container">
-                            <h2>New Customers</h2>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti ea iste modi optio praesentium quidem soluta voluptatem. Eaque iusto non officia provident quam quis rerum vel, vero voluptate voluptatem. Autem.
-                            </p>
-                            <MyButton
-                                linkTo={'/register'}
-                                text='Create new account'
-                            />
-                        </div>
-                    </div>
-                    <div className="from-container">
-                        <form className="login-form" onSubmit={(event) => this.onSubmit(event)}>
-                            <FormField formData={this.state.formData.email} change={(element) => this.updateForm(element)}/>    
-                            <FormField formData={this.state.formData.password} change={(element) => this.updateForm(element)}/>
-                            <button type="submit" className="button" disabled={!formIsValid(this.state.formData)} onClick={(event) => this.onSubmit(event)}>
-                                Login
-                            </button>
-                            {
-                                this.state.formError ? 
-                                    <div className='error-message'>
-                                        {this.props.errorMessage ? this.props.errorMessage : 'wrong data!'}
-                                    </div>
-                                : null
-                            }
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <LoginPresentational
+                {...this.props}
+                updateForm={this.updateForm}
+                onSubmit={this.onSubmit}
+                formData={this.state.formData}
+                formError={this.state.formError}
+                formSuccess={this.state.formSuccess}
+                loading={this.state.loading}
+            />
         )
     }
 }

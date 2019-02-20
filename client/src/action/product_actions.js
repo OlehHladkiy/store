@@ -5,7 +5,8 @@ import {
     PRODUCT_ADD_ERROR, 
     PRODUCT_FROM_SERVER_SUCCESS, 
     PRODUCT_FROM_SERVER_ERROR, 
-    PRODUCT_FROM_SERVER_LAUNCHED } from '../types';
+    PRODUCT_FROM_SERVER_LAUNCHED, 
+    PRODUCT_ADD_TO_CART_SUCCESS} from '../types';
 import { PRODUCT_SERVER } from '../services/linksApi';
 
 const addProductSuccess = () => ({
@@ -33,9 +34,10 @@ export const addProductClear = () => dispatch => {
     })
 }
 
-const productsFromServerSuccess = (articles) => ({
+const productsFromServerSuccess = (articles, articlesSize) => ({
     type: PRODUCT_FROM_SERVER_SUCCESS,
-    articles
+    articles,
+    articlesSize
 })
 
 const productsFromServerError = (errorMessage) => ({
@@ -47,7 +49,7 @@ const productsFromServerLaunched = () => ({
     type: PRODUCT_FROM_SERVER_LAUNCHED
 })
 
-export const productsFromServer = (limit, skip, filters, previousData = []) => async (dispatch) => {
+export const productsFromServer = (limit, skip, filters, previousData = []) => async dispatch => {
     dispatch(productsFromServerLaunched());
     const dataToSubmit = {
         limit,
@@ -62,7 +64,7 @@ export const productsFromServer = (limit, skip, filters, previousData = []) => a
     ]
     
     if(data.success){
-        dispatch(productsFromServerSuccess(newData));
+        dispatch(productsFromServerSuccess(newData, data.size));
     } else {
         dispatch(productsFromServerError(data.err.errmsg));
     }

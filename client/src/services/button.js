@@ -17,7 +17,7 @@ const MyButton = ({type = "default", linkTo, className, text, icon, runAction}) 
                                 {icon ? icon : null}{text}
                             </Link>);
                 break;
-            case 'addToCard':
+            case 'button':
                 template = (<button
                     className={className ? className : 'default-link-button'}
                     onClick={(event) => { event.stopPropagation(); runAction()} }
@@ -32,9 +32,9 @@ const MyButton = ({type = "default", linkTo, className, text, icon, runAction}) 
     }
 
     return (
-        <React.Fragment>
+        <>
             {renderButtons()}
-        </React.Fragment>
+        </>
     );
 }
 

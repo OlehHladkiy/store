@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
-import {withRouter, Link} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -9,16 +9,32 @@ import faUserAlt from '@fortawesome/fontawesome-free-solid/faUserAlt';
 
 import AuthButton from './auth-button';
 import { logout } from '../../action/user_actions'; 
+import { openCartDialog } from '../../action/dialogs_actions'; 
+import { handleCartChange } from '../../action/cart_actions'; 
 import './index.css';
 
 class Header extends Component {
+
+    state = {
+        cartLen: 0
+    }
+
+    clickToLogo = () => {
+        this.props.history.push('/');
+    }
+
+    openCart = () => {
+        this.props.openCartDialog();
+    }
+
+    componentDidMount(){
+        this.props.handleCartChange();
+    }
+
     render() {
-        // if(!this.props.userData){
-        //     return <CircularProgress color="secondary"/>
-        // }
         return (
             <header className="header">
-                <div className="header--logo" onClick={() => this.props.history.push('/')}>
+                <div className="header--logo" onClick={this.clickToLogo}>
                     Sport Nutrition
                 </div>
 
@@ -31,8 +47,8 @@ class Header extends Component {
                 </div>
                 { this.props.userData ?
                     <div className="header--container">
-                        <div className="header--basket header-btn">
-                            <sup className="cart-length">{this.props.userData.cart ? this.props.userData.cart.length : 0}</sup>
+                        <div className="header--basket header-btn" onClick={this.openCart}>
+                            <sup className="cart-length">{this.props.cartLength}</sup>
                             <FontAwesomeIcon icon={faShoppingCart} className="header--icon basket-icon"/>
                             Cart
                         </div>
@@ -53,8 +69,9 @@ class Header extends Component {
 const mapDispatchToProps = (state) => ({
     userData: state.user.userData,
     isFetching: state.user.isFetchingLogout,
-    successLogout: state.user.successLogout
+    successLogout: state.user.successLogout,
+    cartLength: state.cart.cartLength
 })
 
-export default connect(mapDispatchToProps, { logout })(withRouter(Header));
+export default connect(mapDispatchToProps, { logout, openCartDialog, handleCartChange })(withRouter(Header));
 //#5489d9

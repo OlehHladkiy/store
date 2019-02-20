@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { register } from '../../action/user_actions';
 
-import FormField from '../../services/formField';
-import {update, generateData, formIsValid} from '../../services/formAction';
-import Dialog from '@material-ui/core/Dialog';
+import {update, generateData} from '../../services/formAction';
+import RegisterPresentational from './registerPresentational';
 
 import './index.css';
 
@@ -119,14 +118,14 @@ class Register extends Component {
         }
     }
 
-    onSubmit(event){
+    onSubmit = (event) => {
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
 
         this.props.register(dataToSubmit);         
     }
 
-    updateForm(element){
+    updateForm = (element) => {
         const newFormData = update(element, this.state.formData);
 
         this.setState({
@@ -136,7 +135,7 @@ class Register extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        if(this.props !== nextProps){
+        if(this.props.isFetching !== nextProps.isFetching){
             if(nextProps.registerSuccess === true){
                 this.setState({formSuccess: true});
                 this.formSuccess();
@@ -157,42 +156,14 @@ class Register extends Component {
 
     render() {
         return (
-            <div className="register">
-                <div className="register-container">
-                    <form className="register-form" onSubmit={(event) => this.onSubmit(event)}>
-                            <h2>Personal Information</h2>
-                            <FormField formData={this.state.formData.email} change={(element) => this.updateForm(element)}/>    
-                            <FormField formData={this.state.formData.name} change={(element) => this.updateForm(element)}/>
-                            <FormField formData={this.state.formData.lastname} change={(element) => this.updateForm(element)}/>
-                            <FormField formData={this.state.formData.phone} change={(element) => this.updateForm(element)}/>
-                            <h2>Confirm Password</h2>
-                            <FormField formData={this.state.formData.password} change={(element) => this.updateForm(element)}/>
-                            <FormField formData={this.state.formData.confirmPassword} change={(element) => this.updateForm(element)}/>
-                            {
-                                this.state.formSuccess ?
-                                    <div className="success">
-                                        Success
-                                    </div>
-                                : <button type="submit" disabled={!formIsValid(this.state.formData)} className="button" onClick={(event) => this.onSubmit(event)}>
-                                    Register
-                                  </button>
-                            }
-                            {
-                                this.state.formError ? 
-                                    <div className='error-message'>
-                                        {this.props.errorMessage ? this.props.errorMessage : 'wrong data!'}
-                                    </div>
-                                : null
-                            }
-                    </form>
-                </div>
-                <Dialog open={this.state.formSuccess}>
-                    <h2>Congratulations</h2>
-                    <p>
-                        You will redirect to login page a couple second.
-                    </p>    
-                </Dialog>    
-            </div>   
+            <RegisterPresentational
+                {...this.props}
+                updateForm={this.updateForm}
+                onSubmit={this.onSubmit}
+                formData={this.state.formData}
+                formError={this.state.formError}
+                formSuccess={this.state.formSuccess}
+            />   
         )
     }
 }

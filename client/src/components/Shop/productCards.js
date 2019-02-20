@@ -5,7 +5,7 @@ import faEye from '@fortawesome/fontawesome-free-solid/faEye';
 import faShoppingCart from '@fortawesome/fontawesome-free-solid/faShoppingCart';
 import {withRouter} from 'react-router-dom';
 import MyButton from '../../services/button';
-import {openDialog} from '../../action/buy_dialog_actions';
+import {openBuyDialog} from '../../action/dialogs_actions';
 
 const ProductCard = (props) => {
     return (
@@ -29,11 +29,11 @@ const ProductCard = (props) => {
                     icon={<FontAwesomeIcon className="icon-card" icon={faEye}/>}
                 />
                 <MyButton
-                    type="addToCard"
+                    type="button"
                     text="Buy" 
                     className="product-btn button-add" 
                     icon={<FontAwesomeIcon className="icon-card" icon={faShoppingCart}/>}
-                    runAction={() => { props.openDialog(props.article)}}
+                    runAction={() => { props.openBuyDialog(props.article)}}
                 />
             </div>
         </div>
@@ -41,4 +41,4 @@ const ProductCard = (props) => {
 }
 
 
-export default connect(null, {openDialog})(withRouter(ProductCard));
+export default connect(null, {openBuyDialog})(withRouter(ProductCard));

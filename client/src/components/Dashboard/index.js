@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import FormField from '../../services/formField';
 import {update, generateData, formIsValid, populateFields} from '../../services/formAction';
-import UserLayout from '../../hoc/userLayout';
 
 import { connect } from 'react-redux';
 import {updateProfile} from '../../action/user_actions';
+import DashboardPresentational from './dashboardPresentational';
 
 import './index.css';
 
@@ -84,7 +83,7 @@ class Dashboard extends Component {
         edit: false
     }
 
-    onSubmit(event){
+    onSubmit = (event) => {
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
         let validForm = formIsValid(this.state.formData);
@@ -98,7 +97,7 @@ class Dashboard extends Component {
         }
     }
 
-    updateForm(element){
+    updateForm = (element) => {
         const newFormData = update(element, this.state.formData);
 
         this.setState({
@@ -115,14 +114,14 @@ class Dashboard extends Component {
         })
     }
 
-    onToggleEdit(){
+    onToggleEdit = () => {
         this.setState(state => ({
             edit: !state.edit
         }))
     }
 
     componentWillReceiveProps(nextProps){
-        if(this.props !== nextProps){
+        if(this.props.isFetchingUpdateProfile !== nextProps.isFetchingUpdateProfile){
             if(nextProps.isFetchingUpdateProfile === false){
                 if(nextProps.updateSuccess){
                     this.setState({
@@ -141,48 +140,17 @@ class Dashboard extends Component {
 
     render(){
         return (
-            <UserLayout {...this.props}>
-                    <div className="info-container">
-                        <h2>User Information</h2>
-                        <form className="form" onSubmit={(event) => this.onSubmit(event)}>
-                            <FormField 
-                                readOnly={!this.state.edit} 
-                                classNameChildElem={!this.state.edit ? "unactive" : null} 
-                                formData={this.state.formData.email} 
-                                change={(element) => this.updateForm(element)}/>
-                            <FormField 
-                                readOnly={!this.state.edit} 
-                                classNameChildElem={!this.state.edit ? "unactive" : null} 
-                                formData={this.state.formData.name} 
-                                change={(element) => this.updateForm(element)}/>
-                            <FormField 
-                                readOnly={!this.state.edit} 
-                                classNameChildElem={!this.state.edit ? "unactive" : null} 
-                                formData={this.state.formData.lastname} 
-                                change={(element) => this.updateForm(element)}/>
-                            <FormField 
-                                readOnly={!this.state.edit} 
-                                classNameChildElem={!this.state.edit ? "unactive" : null} 
-                                formData={this.state.formData.phone}
-                                change={(element) => this.updateForm(element)}/>
-                            {
-                                !this.state.edit ? 
-                                    <button type="button" className="button" onClick={(event) => { event.preventDefault(); this.onToggleEdit() }}>Edit</button>
-                                : <button type="submit" className="button" disabled={!formIsValid(this.state.formData)} onClick={(event) => this.onSubmit(event)}>Save</button>
-                            }
-                            {
-                                this.state.formError ? 
-                                    <div className='error-message'>
-                                        {this.props.errorMessage ? this.props.errorMessage : 'wrong data!'}
-                                    </div>
-                                : null
-                            }
-                        </form>
-                    </div>
-                    <div className="info-container">
-                        <h2>History Purchases</h2>
-                    </div>
-            </UserLayout>
+            <DashboardPresentational
+                {...this.props}
+                updateForm={this.updateForm}
+                onSubmit={this.onSubmit}
+                formData={this.state.formData}
+                formError={this.state.formError}
+                formSuccess={this.state.formSuccess}
+                loading={this.state.loading}
+                edit={this.state.edit}
+                onToggleEdit={this.onToggleEdit}
+            />
         );
     }
 }

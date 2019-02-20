@@ -74,9 +74,9 @@ const FormField = (props) => {
     }
 
     return (
-        <React.Fragment>
+        <>
             {render()}
-        </React.Fragment>
+        </>
     );
 }
 
