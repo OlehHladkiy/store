@@ -10,7 +10,7 @@ import UserLayout from '../../../hoc/userLayout';
 import './index.css';
 
 const AddProductPresentational = (props) => {
-    const { onSubmit, updateForm, formData, formError, formSuccess, imagesHandler, deleteAtribute } = props;
+    const { onSubmit, updateForm, formData, formError, formSuccess, imagesHandler, deleteAtribute, buttonName } = props;
     return (
         <UserLayout {...props}>
                 <div className="add-product">
@@ -62,7 +62,7 @@ const AddProductPresentational = (props) => {
                                                 formData.packingAndPrice.addedValues.map(item => (
                                                     <div key={item._id} className="add-atribute">
                                                         {item.name} - {item.price}$
-                                                        <FontAwesomeIcon onClick={() => deleteAtribute(item._id, 'packing')} icon={faPlus} className="icon-delete-atribute"/>
+                                                        <FontAwesomeIcon onClick={() => deleteAtribute(item._id, 'packingAndPrice')} icon={faPlus} className="icon-delete-atribute"/>
                                                     </div>
                                                 ))
                                             }
@@ -75,7 +75,7 @@ const AddProductPresentational = (props) => {
                                 </div>
                                 <FormField formData={formData.available} change={updateForm}/>
                                 <button type="submit" disabled={!formIsValid(formData)} className="button" onClick={(event) => onSubmit(event)}>
-                                    Add Product
+                                    {buttonName} Product
                                 </button>
                                 {
                                     formError ? 

@@ -68,7 +68,11 @@ export const populateFields = (formData, dataIn) => {
     for(let key in newFormData){
         newFormData[key].value = dataIn[key];
         newFormData[key].valid = true;
-        newFormData[key].touched = true;
+    
+        if(newFormData[key].validation.withAtr){
+            newFormData[key].addedValues = dataIn[key];
+            newFormData[key].value = '';
+        }
     }
     return newFormData;
 }

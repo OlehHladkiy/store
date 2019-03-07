@@ -1,13 +1,14 @@
 import { 
     CART_ITEM_ADD_SUCCESS, 
     CART_ITEM_CLEAR,
-    CART_GET_ITEMS_SUCCESS,
-    CART_ITEM_DELETE_SUCCESS,
-    AMOUNT_CART_ITEMS
+    AMOUNT_CART_ITEMS,
+    GET_CART_ITEMS_BY_ID_SUCCESS,
+    GET_CART_ITEMS_BY_ID_LAUNCHED
 } from '../types';
 
 const initState = {
-    addedToCartItem: ""
+    addedToCartItem: "",
+    cartArticles: [],
 }
 
 export default function(state = initState, action){
@@ -16,10 +17,10 @@ export default function(state = initState, action){
             return {...state, addedToCartItem: action.articleId};
         case CART_ITEM_CLEAR:
             return {...state, addedToCartItem: ""};
-        case CART_ITEM_DELETE_SUCCESS:
-            return {...state, cartArticles: action.cartArticles };
-        case CART_GET_ITEMS_SUCCESS:
-            return {...state, cartArticles: action.cartArticles };
+        case GET_CART_ITEMS_BY_ID_LAUNCHED:
+            return {...state, cartItemsFetching: true};
+        case GET_CART_ITEMS_BY_ID_SUCCESS:
+            return {...state, cartItemsFetching: false, cartArticles: action.cartArticles};
         case AMOUNT_CART_ITEMS:
             return {...state, cartLength: action.length}
         default:

@@ -141,7 +141,6 @@ app.post('/api/product/shop', (req, res) => {
     let limit = req.body.limit ? parseInt(req.body.limit) : 100;
     let skip = parseInt(req.body.skip);
     let findArgs = {};    
-
     for(let key in req.body.filters){
         if(req.body.filters[key].length > 0){
             findArgs[key] = req.body.filters[key];
@@ -163,6 +162,15 @@ app.post('/api/product/shop', (req, res) => {
             articles
         })
     })
+})
+
+app.delete('/api/product/remove_article', auth, admin, (req, res) => {
+    Product.remove({
+        "_id": mongoose.Types.ObjectId(req.query.id)
+    }, (err, doc) => {
+        if(err) res.status(400).send({success: false, err});
+        res.status(200).send({success: true});
+    });
 })
 
 app.post('/api/product/article', (req, res) => {
@@ -217,6 +225,19 @@ app.post('/api/product/updateBrand', (req, res) => {
     })
 })
 
+app.post('/api/product/updateArticle', auth, admin, (req, res) => {
+    Product.findByIdAndUpdate({
+        _id: req.query.id
+    }, {
+        $set: req.body
+    }, 
+    {new: true},
+    (err, brand) => {
+        if(err) res.status(400).send({success: false, err});
+        res.status(200).send({success: true});
+    })
+})
+
 app.post('/api/product/category', auth, admin, (req, res) => {
     const category = new Category(req.body);
 
@@ -259,6 +280,7 @@ app.post('/api/product/updateCategory', auth, admin, (req, res) => {
 app.get('/api/product/articles_by_id', (req, res) => {
     let type = req.query.type;
     let items = req.query.id;
+    
     if(type === "array"){
         let ids = req.query.id.split(',');
         items = [];

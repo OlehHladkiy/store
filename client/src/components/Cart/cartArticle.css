@@ -45,6 +45,10 @@
     padding: 0;
 }
 
+.article-input-section .form-input:focus {
+    box-shadow: none;
+}
+
 .article-input-section input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;

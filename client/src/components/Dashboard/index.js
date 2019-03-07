@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import {updateProfile} from '../../action/user_actions';
 import DashboardPresentational from './dashboardPresentational';
 
-import './index.css';
-
 class Dashboard extends Component {
     state = {
         formSuccess: false,

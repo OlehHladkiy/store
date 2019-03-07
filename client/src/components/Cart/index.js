@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {closeCartDialog} from '../../action/dialogs_actions';
-import {getCartData, deleteFromCart} from '../../action/cart_actions';
+import {getCartData, deleteFromCart, getCartItemsById} from '../../action/cart_actions';
 import CartArticle from './cartArticle';
 import CartPresentational from './cartPresentational';
-
-import './index.css';
 
 class Cart extends Component {
     state = {
@@ -20,7 +18,8 @@ class Cart extends Component {
     componentWillReceiveProps(nextProps){
         if(this.props.open !== nextProps.open){
             if(nextProps.open === true){
-                this.props.getCartData();
+                // this.props.getCartData();
+                this.props.getCartItemsById();
             } 
         }
     }
@@ -34,6 +33,7 @@ class Cart extends Component {
             totalValues: newTotalValues
         }, () => {
             this.calculateTotal();
+            this.props.getCartItemsById();
         })
     }
 
@@ -74,7 +74,6 @@ class Cart extends Component {
     }
 
     render() {
-        console.log(this.state.totalValues);
         return (
             <CartPresentational
                 {...this.props}
@@ -92,4 +91,4 @@ const mapStateToProps = (state) => ({
     cartArticles: state.cart.cartArticles
 })
 
-export default connect(mapStateToProps, { closeCartDialog, getCartData, deleteFromCart })(Cart);
+export default connect(mapStateToProps, { closeCartDialog, getCartData, deleteFromCart, getCartItemsById })(Cart);

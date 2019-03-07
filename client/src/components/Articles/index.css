@@ -1,0 +1,33 @@
+.list-article-container {
+      width: auto;
+      height: 100%;
+      background-color: rgb(247, 247, 247);
+      padding: 20px;
+}
+
+.list-article-container h2 {
+      margin: 0;
+      padding: 0;
+}
+
+.pag-btn {
+      border: none;
+      margin: 15px;
+      background-color: gray;
+      color: white;
+      width: 30px;
+      height: 30px;
+      font-size: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+}
+
+.pag-btn:disabled {
+      background-color: rgb(167, 166, 166);
+      color: white;
+      cursor: default;
+}
+
+.pag-btn.left {
+      transform: rotate(180deg);
+}

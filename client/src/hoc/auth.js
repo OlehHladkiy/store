@@ -15,7 +15,7 @@ const Auth = (ChildComponent, reload, adminRoute = null) => {
         }    
 
         componentWillReceiveProps(nextProps){
-            if(this.props !== nextProps){
+            if(this.props.isFetchingAuth !== nextProps.isFetchingAuth){
                 if(nextProps.isFetchingAuth === false){
                     this.setState({
                         loading: false

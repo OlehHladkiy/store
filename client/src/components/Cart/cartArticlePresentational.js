@@ -28,11 +28,19 @@ const cartArticlePresentational = (props) => {
             </div>
             <div className="article-input-section">
                 <div className="quantity-button">
-                    <FontAwesomeIcon className="quantity-icon" icon={faMinus}/>
+                    <FontAwesomeIcon 
+                        className="quantity-icon" 
+                        icon={faMinus} 
+                        onClick={() => props.changeQuantity('dec')}
+                    />
                 </div>
-                <FormField formData={formData.quantity} change={updateForm}/>
+                <FormField readOnly={true} formData={formData.quantity} change={updateForm}/>
                 <div className="quantity-button">
-                    <FontAwesomeIcon className="quantity-icon" icon={faPlus}/>
+                    <FontAwesomeIcon 
+                        className="quantity-icon" 
+                        icon={faPlus}
+                        onClick={() => props.changeQuantity('inc')}
+                    />
                 </div>
             </div>
             <div className="article-action-section">

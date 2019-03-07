@@ -10,10 +10,6 @@ const UserLayout = (props) => {
             title: "User Information",
             linkTo: "/user/dashboard"
         },
-        {
-            title: "My orders",
-            linkTo: "/user/orders"
-        }
     ];
 
     const adminLinks = [
@@ -26,9 +22,9 @@ const UserLayout = (props) => {
             linkTo: "/admin/manage_categories"
         },
         {
-            title: "Site Info",
-            linkTo: "/admin/site_info"
-        }
+            title: "Articles",
+            linkTo: "/admin/articles"
+        },
     ];
 
     const generateLinks = (links) => (

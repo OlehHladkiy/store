@@ -52,7 +52,7 @@ class ProductBuyDialog extends Component {
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
 
-        this.props.addToCart(this.props.article, dataToSubmit);
+        this.props.addToCart(this.props.article._id, dataToSubmit);
         this.props.closeBuyDialog();
     }
 

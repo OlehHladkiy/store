@@ -1,0 +1,25 @@
+.list-article {
+      display: flex;
+      justify-content: space-between;
+      background-color: white;
+      min-height: 70px;
+
+      margin-top: 10px;
+      cursor: pointer;
+}
+
+.list-article-section {
+      width: 13%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      /* border-right: 0.1px solid rgb(219, 219, 219);  */
+
+      font-size: 13px;
+}
+
+.list-article-image {
+      width: 10%;
+}

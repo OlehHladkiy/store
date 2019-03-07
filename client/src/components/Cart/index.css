@@ -7,8 +7,16 @@
 
 .cart-header {
     display: flex;
+    
+    align-items: center;
+    justify-content: space-between;
 
     width: 100%;
+}
+
+.close-icon:hover {
+    color: gray;
+    cursor: pointer;
 }
 
 .header-text {

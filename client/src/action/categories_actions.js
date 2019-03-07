@@ -121,11 +121,9 @@ const getCategoriesLaunched = () => ({
 export const getCategories = () => async dispatch => {
     dispatch(getCategoriesLaunched());
     const { data } = await axios.get(`${PRODUCT_SERVER}/categories`);
-
     if(data.success){
         dispatch(getCategoriesSuccess(data.categories));
     } else {
-        console.log(data);
         dispatch(getCategoriesError(data.err));
     }
 }

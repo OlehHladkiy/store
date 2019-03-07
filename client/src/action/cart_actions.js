@@ -4,12 +4,39 @@ import {
     CART_ITEM_DELETE_SUCCESS, 
     CART_GET_ITEMS_SUCCESS,
     AMOUNT_CART_ITEMS,
+    CART_UPDATE_SUCCESS,
+    GET_CART_ITEMS_BY_ID_SUCCESS,
 } from '../types';
+import axios from 'axios';
+import { PRODUCT_SERVER } from '../services/linksApi';
 
 const CART_ARTICLES = "cartArticles";
 
+const getCartItemsByIdSuccess = (cartArticles) => ({
+    type: GET_CART_ITEMS_BY_ID_SUCCESS,
+    cartArticles
+})
+
+export const getCartItemsById = () => async dispatch => {
+    let items = JSON.parse(localStorage.getItem(CART_ARTICLES));
+    if(items && items.length > 0){
+        let ids = items.map(item => item.articleId);
+        const {data} = await axios.get(`${PRODUCT_SERVER}/articles_by_id?id=${ids}&type=array`);
+        let newData = data.map((item, i) => {
+            let index = items.findIndex(el => el.articleId === item._id);
+            return {
+                article: item,
+                selectedParameters: items[index].selectedParameters
+            }
+        })
+        dispatch(getCartItemsByIdSuccess(newData));
+    } else {
+        dispatch(getCartItemsByIdSuccess([]));
+    }
+}
+
 const getDataFromLocalSt = (key) => {
-    let items = JSON.parse(localStorage.getItem(key));
+    let items = JSON.parse(localStorage.getItem(key));  
     return items;
 }
 
@@ -30,10 +57,9 @@ export const handleCartChange = () => dispatch => {
     dispatch(cartChange());
 }
 
-const addToCartHandler = (article, selectedParameters) => {
-    let newItem = { article, selectedParameters };
+const addToCartHandler = (articleId, selectedParameters) => {
+    let newItem = { articleId, selectedParameters };
     let newCartItems = [];
-    let duplicate = false;
     let duplicateIndex = -1;
 
     let cartItems = getDataFromLocalSt(CART_ARTICLES);
@@ -42,36 +68,21 @@ const addToCartHandler = (article, selectedParameters) => {
     }
 
     cartItems.forEach((item, index) => {
-        if(item.article._id === article._id){
-            newItem.article.quantity++;
+        if(item.articleId === articleId){
             duplicateIndex = index;
-            duplicate = true;
-        }
-    })
+        } 
+    });
 
-    if(duplicate){
-        cartItems[duplicateIndex] = newItem;
-
-        newCartItems = [...cartItems];
-    } else {
-        newItem.article.quantity = 1;
+    if(duplicateIndex == -1){
+        newItem.selectedParameters.quantity = 1;
         newCartItems = [...cartItems, newItem];
+    } else {
+        newCartItems = [...cartItems];
     }
 
     pushDataToLocalSt(newCartItems, CART_ARTICLES);
 
     return true;
-}
-
-const deleteFromCartHandler = (id) => {
-    let cartItems = getDataFromLocalSt(CART_ARTICLES);
-    let index = cartItems.findIndex(item => item.article._id === id);
-
-    let newCartItems = [...cartItems.slice(0, index), ...cartItems.slice(index + 1)];
-
-    pushDataToLocalSt(newCartItems, CART_ARTICLES);
-
-    return newCartItems;
 }
 
 const addToCartSuccess = (articleId) => ({
@@ -83,17 +94,28 @@ const clearArticleId = () => ({
     type: CART_ITEM_CLEAR
 })
 
-export const addToCart = (article, selectedParameters) => dispatch => {
-    let success = addToCartHandler(article, selectedParameters);
+export const addToCart = (articleId, selectedParameters) => dispatch => {
+    let success = addToCartHandler(articleId, selectedParameters);
 
     if(success){
-        dispatch(addToCartSuccess(article._id));
+        dispatch(addToCartSuccess(articleId));
         dispatch(cartChange());
         setTimeout(() => {
             dispatch(clearArticleId());
         }, 2000);
 
     }
+}
+
+const deleteFromCartHandler = (id) => {
+    let cartItems = getDataFromLocalSt(CART_ARTICLES);
+    let index = cartItems.findIndex(item => item.articleId === id);
+
+    let newCartItems = [...cartItems.slice(0, index), ...cartItems.slice(index + 1)];
+
+    pushDataToLocalSt(newCartItems, CART_ARTICLES);
+
+    return newCartItems;
 }
 
 const deleteFromCartSuccess = (cartArticles) => ({
@@ -119,6 +141,17 @@ export const getCartData = () => dispatch => {
     dispatch(getCartDataSuccess(cartData));
 }
 
-export const updateCart = () => dispatch => {
-    
+const updateCartSuccess = (cartArticles) => ({
+    type: CART_UPDATE_SUCCESS,
+    cartArticles
+})
+
+export const updateCart = (id, selectedParameters) => dispatch => {
+    let cartData = [...getDataFromLocalSt(CART_ARTICLES)];
+
+    let findItem = cartData.find((item) => item.articleId === id);
+    findItem.selectedParameters = selectedParameters;
+
+    pushDataToLocalSt(cartData, CART_ARTICLES);
+    dispatch(updateCartSuccess(cartData));
 }

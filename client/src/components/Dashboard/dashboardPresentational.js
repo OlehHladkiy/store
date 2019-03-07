@@ -2,6 +2,7 @@ import React from 'react';
 import UserLayout from '../../hoc/userLayout';
 import FormField from '../../services/formField';
 import {formIsValid} from '../../services/formAction';
+import './index.css';
 
 const DashboardPresentational = (props) => {
     const {formData, onSubmit, updateForm, formSuccess, formError, edit, onToggleEdit} = props;
@@ -44,9 +45,6 @@ const DashboardPresentational = (props) => {
                                 : null
                             }
                         </form>
-                    </div>
-                    <div className="info-container">
-                        <h2>History Purchases</h2>
                     </div>
             </UserLayout>
     );

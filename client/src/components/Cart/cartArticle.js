@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {update, populateOptionFields, generateData, formIsValid, resetFields} from '../../services/formAction';
+import {update, populateOptionFields, generateData} from '../../services/formAction';
 import CartArticlePresentational from './cartArticlePresentational';
+import {updateCart} from '../../action/cart_actions';
+import {connect} from 'react-redux';
 
 class CartArticle extends Component {
     state = {
@@ -61,8 +63,11 @@ class CartArticle extends Component {
 
     updateForm = (element) => {
         let newFormData = update(element, this.state.formData);
+        let updateData = generateData(newFormData);
 
+        this.props.updateCart(this.props.article._id, updateData);
         this.changePrice(newFormData);
+
         this.setState({
             formData: newFormData,
             formError: false
@@ -78,6 +83,7 @@ class CartArticle extends Component {
         formDataWithNewPacking.packingAndPrice.value = this.props.selectedParameters.packingAndPrice;
         
         newFormData = {...formDataWithNewTaste, ...formDataWithNewPacking};
+        newFormData.quantity.value = this.props.selectedParameters.quantity;
         
         this.changePrice(newFormData);
         this.setState({
@@ -101,6 +107,29 @@ class CartArticle extends Component {
         return findPacking.price;
     }
 
+    changeQuantity = (type) => {
+        let quantity = this.state.formData.quantity.value;
+        let formData = {...this.state.formData};
+        let newQuantity = {...formData.quantity};
+
+        if(type === 'inc') {
+            ++quantity;
+        } else if(type === 'dec') {
+            --quantity;
+        }
+
+        if(quantity <= 0) quantity = 1;
+        newQuantity.value = quantity;
+        
+        formData.quantity = newQuantity;
+        this.changePrice(formData);
+        this.props.updateCart(this.props.article._id, generateData(formData));
+
+        this.setState({
+            formData
+        })
+    }
+
     render(){
         return (
             <CartArticlePresentational
@@ -108,9 +137,10 @@ class CartArticle extends Component {
                 formData={this.state.formData}
                 updateForm={this.updateForm}
                 price={this.state.price}
+                changeQuantity={this.changeQuantity}
             />
         )
     }
 }
 
-export default CartArticle;
+export default connect(null, {updateCart})(CartArticle);

@@ -1,6 +1,9 @@
 import React from 'react';
 import MyButton from '../../services/button';
 import { Dialog } from '@material-ui/core';
+import CancelRounded from '@material-ui/icons/CancelRounded';
+
+import './index.css';
 
 const CartPresentational = (props) => {
     const { open, closeDialog, renderArticles, total, length } = props;
@@ -16,7 +19,7 @@ const CartPresentational = (props) => {
                         Cart
                     </div>
                     <div onClick={closeDialog}>
-                        Close
+                        <CancelRounded className="close-icon" fontSize="large"/>
                     </div>
                 </div>
                 <div className="cart-content">

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {update, generateData, formIsValid, resetFields, populateOptionFields, validate} from '../../../services/formAction';
+import {update, generateData, populateFields, resetFields, populateOptionFields, validate} from '../../../services/formAction';
 import {getBrands, getCategories} from '../../../action/categories_actions';
-import {addProduct, addProductClear} from '../../../action/product_actions';
+import {addProduct, addProductClear, getProduct, saveProduct, clearUpdateStatus} from '../../../action/product_actions';
 import AddProductPresentational from './addProductPresentational';
 
 class AddProduct extends Component {
 
     state = {
+        button: 'Add',
         formSuccess: false,
         formError: false,
         formData: {
@@ -169,7 +170,12 @@ class AddProduct extends Component {
     onSubmit = (event) => {
         event.preventDefault();
         let dataToSubmit = generateData(this.state.formData);
-        this.props.addProduct(dataToSubmit);
+        if(this.state.button === 'Add'){
+            this.props.addProduct(dataToSubmit);
+        } else {
+            let id = this.props.match.params.id;
+            this.props.saveProduct(dataToSubmit, id);
+        }
     }
 
     updateForm = (element) => {
@@ -215,6 +221,15 @@ class AddProduct extends Component {
     componentDidMount(){
         this.props.getBrands();
         this.props.getCategories();
+        if(this.props.match.params.id){
+            let id = this.props.match.params.id;
+            this.setState({button: 'Save'})
+            this.props.getProduct(id);
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.clearUpdateStatus();
     }
 
     updateFormData(newFormData){
@@ -252,6 +267,14 @@ class AddProduct extends Component {
                 }
             }
         }
+        if(this.props.isFetchingProduct !== nextProps.isFetchingProduct){
+            if(nextProps.isFetchingProduct === false){
+                const newFormData = populateFields(this.state.formData, nextProps.updateArticle);
+                this.setState({
+                    formData: newFormData
+                })
+            }
+        }
     }
 
     imagesHandler = (images) => {
@@ -282,6 +305,7 @@ class AddProduct extends Component {
                 handleDialogClose={this.handleDialogClose}
                 handleDialogOpen={this.handleDialogOpen}
                 openDialog={this.state.openDialog}
+                buttonName={this.state.button}
             />
         )
     }
@@ -295,7 +319,9 @@ const mapStateToProps = (state) => ({
     errorMessage: state.kindOfCategory.errorMessage,
     isFetchingAddProduct: state.product.isFetchingAddProduct,
     addProductSuccess: state.product.addProductSuccess,
-    errorMessageAddProduct: state.product.errorMessage
+    errorMessageAddProduct: state.product.errorMessage,
+    updateArticle: state.product.updateArticle,
+    isFetchingProduct: state.product.isFetchingProduct
 })
 
-export default connect(mapStateToProps, {getBrands, getCategories, addProduct, addProductClear})(AddProduct);
+export default connect(mapStateToProps, {getBrands, getCategories, addProduct, addProductClear, getProduct, saveProduct, clearUpdateStatus})(AddProduct);
