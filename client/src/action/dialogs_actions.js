@@ -3,7 +3,7 @@ import {
     CLOSE_BUY_DIALOG, 
     OPEN_CART_DIALOG,
     CLOSE_CART_DIALOG
-} from "../types";
+} from "../types/buy_types";
 
 export const openBuyDialog = (article) => dispatch => {
     dispatch({

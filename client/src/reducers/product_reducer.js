@@ -12,7 +12,7 @@ import {
     PRODUCT_ADD_LAUNCHED,
     REMOVE_PRODUCT_LAUNCHED,
     REMOVE_PRODUCT_SUCCESS
-} from "../types";
+} from "../types/product_types";
 
 export default function(state = {}, action){
     switch(action.type){

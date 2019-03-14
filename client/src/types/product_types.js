@@ -1,0 +1,15 @@
+export const PRODUCT_ADD_SUCCESS = "product_add_success";
+export const PRODUCT_ADD_ERROR = "product_add_error";
+export const PRODUCT_ADD_CLEAR = "product_add_clear";
+export const PRODUCT_ADD_LAUNCHED = "product_add_launched"
+export const PRODUCT_FROM_SERVER_SUCCESS = "product_from_server_success";
+export const PRODUCT_FROM_SERVER_ERROR = "product_from_server_error";
+export const PRODUCT_FROM_SERVER_LAUNCHED = "product_from_server_launched";
+export const GET_PRODUCT_SUCCESS = "get_product_success";
+export const GET_PRODUCT_ERROR = "get_product_error";
+export const GET_PRODUCT_LAUNCHED = "get_product_launched";
+export const SAVE_PRODUCT_SUCCESS = "save_product_success";
+export const REMOVE_PRODUCT_LAUNCHED = "remove_product_launched";
+export const REMOVE_PRODUCT_SUCCESS = "remove_product_success";
+export const REMOVE_PRODUCT_ERROR = "remove_product_error";
+export const CLEAR_PRODUCT = "clear_product";

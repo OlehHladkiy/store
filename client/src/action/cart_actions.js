@@ -2,15 +2,30 @@ import {
     CART_ITEM_ADD_SUCCESS, 
     CART_ITEM_CLEAR, 
     CART_ITEM_DELETE_SUCCESS, 
+    GET_CART_ITEMS_BY_ID_SUCCESS,
+    GET_CART_ITEMS_BY_ID_LAUNCHED,
     CART_GET_ITEMS_SUCCESS,
     AMOUNT_CART_ITEMS,
     CART_UPDATE_SUCCESS,
-    GET_CART_ITEMS_BY_ID_SUCCESS,
-} from '../types';
+} from '../types/cart_types';
 import axios from 'axios';
 import { PRODUCT_SERVER } from '../services/linksApi';
 
 const CART_ARTICLES = "cartArticles";
+
+const getDataFromLocalSt = (key) => {
+    let items = JSON.parse(localStorage.getItem(key));  
+    return items;
+}
+
+const pushDataToLocalSt = (data, key) => {
+    data = JSON.stringify(data);
+    localStorage.setItem(key, data);
+}
+
+const getCartItemsByIdLaunched = () => ({
+    type: GET_CART_ITEMS_BY_ID_LAUNCHED
+})
 
 const getCartItemsByIdSuccess = (cartArticles) => ({
     type: GET_CART_ITEMS_BY_ID_SUCCESS,
@@ -18,6 +33,7 @@ const getCartItemsByIdSuccess = (cartArticles) => ({
 })
 
 export const getCartItemsById = () => async dispatch => {
+    dispatch(getCartItemsByIdLaunched());
     let items = JSON.parse(localStorage.getItem(CART_ARTICLES));
     if(items && items.length > 0){
         let ids = items.map(item => item.articleId);
@@ -33,16 +49,6 @@ export const getCartItemsById = () => async dispatch => {
     } else {
         dispatch(getCartItemsByIdSuccess([]));
     }
-}
-
-const getDataFromLocalSt = (key) => {
-    let items = JSON.parse(localStorage.getItem(key));  
-    return items;
-}
-
-const pushDataToLocalSt = (data, key) => {
-    data = JSON.stringify(data);
-    localStorage.setItem(key, data);
 }
 
 const cartChange = () => {
@@ -85,13 +91,14 @@ const addToCartHandler = (articleId, selectedParameters) => {
     return true;
 }
 
-const addToCartSuccess = (articleId) => ({
-    type: CART_ITEM_ADD_SUCCESS,
-    articleId
-})
 
 const clearArticleId = () => ({
     type: CART_ITEM_CLEAR
+})
+
+const addToCartSuccess = (articleId) => ({
+    type: CART_ITEM_ADD_SUCCESS,
+    articleId
 })
 
 export const addToCart = (articleId, selectedParameters) => dispatch => {

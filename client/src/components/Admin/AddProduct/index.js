@@ -175,6 +175,7 @@ class AddProduct extends Component {
         } else {
             let id = this.props.match.params.id;
             this.props.saveProduct(dataToSubmit, id);
+            this.props.history.push('/admin/articles');
         }
     }
 

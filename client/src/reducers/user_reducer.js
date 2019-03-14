@@ -12,7 +12,7 @@ import {
     USER_UPDATE_PROFILE_SUCCESS,
     USER_UPDATE_PROFILE_ERROR,
     USER_UPDATE_PROFILE_LAUNCHED
-} from '../types'
+} from '../types/user_types';
 
 export default function(state = {}, action){
     switch(action.type){

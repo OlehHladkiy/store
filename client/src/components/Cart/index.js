@@ -18,7 +18,6 @@ class Cart extends Component {
     componentWillReceiveProps(nextProps){
         if(this.props.open !== nextProps.open){
             if(nextProps.open === true){
-                // this.props.getCartData();
                 this.props.getCartItemsById();
             } 
         }

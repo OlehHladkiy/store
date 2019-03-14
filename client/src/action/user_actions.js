@@ -15,7 +15,7 @@ import {
     USER_UPDATE_PROFILE_SUCCESS,
     USER_UPDATE_PROFILE_ERROR,
     USER_UPDATE_PROFILE_LAUNCHED
-} from '../types';
+} from '../types/user_types';
 import {USER_SERVER} from '../services/linksApi';
 
 const loginSucces = () => ({
@@ -103,7 +103,12 @@ const registerError = (data) => ({
     message: data.err
 })
 
+const registerLaunched = () => ({
+    type: USER_REGISTER_LAUNCHED
+})
+
 export const register = (dataToSubmit) => async dispatch => {
+
     const { data } = await axios.post(`${USER_SERVER}/register`, dataToSubmit);
 
     if(data.success){

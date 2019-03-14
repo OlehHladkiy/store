@@ -13,7 +13,7 @@ import {
     GET_PRODUCT_LAUNCHED,
     PRODUCT_ADD_LAUNCHED,
     REMOVE_PRODUCT_SUCCESS,
-    REMOVE_PRODUCT_LAUNCHED} from '../types';
+    REMOVE_PRODUCT_LAUNCHED} from '../types/product_types';
 import { PRODUCT_SERVER } from '../services/linksApi';
 
 const addProductSuccess = () => ({

@@ -20,7 +20,7 @@ import {
     PRODUCT_ADD_CATEGORY_LAUNCHED,
     PRODUCT_UPDATE_BRAND_SUCCESS,
     PRODUCT_UPDATE_CATEGORY_SUCCESS
-} from '../types'
+} from '../types/categories_types'
 import axios from 'axios';
 import { PRODUCT_SERVER } from '../services/linksApi';
 

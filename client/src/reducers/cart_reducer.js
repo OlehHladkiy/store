@@ -4,7 +4,7 @@ import {
     AMOUNT_CART_ITEMS,
     GET_CART_ITEMS_BY_ID_SUCCESS,
     GET_CART_ITEMS_BY_ID_LAUNCHED
-} from '../types';
+} from '../types/cart_types';
 
 const initState = {
     addedToCartItem: "",

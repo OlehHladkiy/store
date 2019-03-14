@@ -20,7 +20,7 @@ import {
     PRODUCT_ADD_CATEGORY_ERROR,
     PRODUCT_ADD_CATEGORY_LAUNCHED,
     PRODUCT_UPDATE_CATEGORY_SUCCESS
-} from '../types'
+} from '../types/categories_types'
 
 export default function(state = {}, action){
     switch(action.type){
