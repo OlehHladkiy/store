@@ -51,7 +51,7 @@ export const getCartItemsById = () => async dispatch => {
     }
 }
 
-const cartChange = () => {
+const calculateCartItems = () => {
     let items = getDataFromLocalSt(CART_ARTICLES);
     return {
         type: AMOUNT_CART_ITEMS,
@@ -59,8 +59,8 @@ const cartChange = () => {
     }
 }
 
-export const handleCartChange = () => dispatch => {
-    dispatch(cartChange());
+export const handleCalculateCartItems = () => dispatch => {
+    dispatch(calculateCartItems());
 }
 
 const addToCartHandler = (articleId, selectedParameters) => {
@@ -106,11 +106,10 @@ export const addToCart = (articleId, selectedParameters) => dispatch => {
 
     if(success){
         dispatch(addToCartSuccess(articleId));
-        dispatch(cartChange());
+        dispatch(calculateCartItems());
         setTimeout(() => {
             dispatch(clearArticleId());
         }, 2000);
-
     }
 }
 
@@ -133,7 +132,7 @@ const deleteFromCartSuccess = (cartArticles) => ({
 export const deleteFromCart = (id) => dispatch => {
     let newData = deleteFromCartHandler(id);
     
-    dispatch(cartChange());
+    dispatch(calculateCartItems());
     dispatch(deleteFromCartSuccess(newData));
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {update, generateData, formIsValid, populateOptionFields, resetFields} from '../../services/formAction';
+import {update, generateData, populateOptionFields, resetFields} from '../../services/formAction';
 import {connect} from 'react-redux';
 import {closeBuyDialog} from '../../action/dialogs_actions';
 import {addToCart} from '../../action/cart_actions';

@@ -66,12 +66,18 @@ class CartArticle extends Component {
         let updateData = generateData(newFormData);
 
         this.props.updateCart(this.props.article._id, updateData);
-        this.changePrice(newFormData);
 
         this.setState({
             formData: newFormData,
             formError: false
         })
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if(this.state.formData.quantity.value !== prevState.formData.quantity.value ||
+        this.state.formData.packingAndPrice.value !== prevState.formData.packingAndPrice.value){
+            this.changePrice(this.state.formData);
+        }
     }
 
     componentDidMount(){
@@ -122,7 +128,6 @@ class CartArticle extends Component {
         newQuantity.value = quantity;
         
         formData.quantity = newQuantity;
-        this.changePrice(formData);
         this.props.updateCart(this.props.article._id, generateData(formData));
 
         this.setState({

@@ -10,7 +10,7 @@ import faUserAlt from '@fortawesome/fontawesome-free-solid/faUserAlt';
 import AuthButton from './auth-button';
 import { logout } from '../../action/user_actions'; 
 import { openCartDialog } from '../../action/dialogs_actions'; 
-import { handleCartChange } from '../../action/cart_actions'; 
+import { handleCalculateCartItems } from '../../action/cart_actions'; 
 import './index.css';
 
 class Header extends Component {
@@ -28,7 +28,7 @@ class Header extends Component {
     }
 
     componentDidMount(){
-        this.props.handleCartChange();
+        this.props.handleCalculateCartItems();
     }
 
     render() {
@@ -73,5 +73,5 @@ const mapDispatchToProps = (state) => ({
     cartLength: state.cart.cartLength
 })
 
-export default connect(mapDispatchToProps, { logout, openCartDialog, handleCartChange })(withRouter(Header));
+export default connect(mapDispatchToProps, { logout, openCartDialog, handleCalculateCartItems })(withRouter(Header));
 //#5489d9
