@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import faShoppingCart from '@fortawesome/fontawesome-free-solid/faShoppingCart';
 import faUserAlt from '@fortawesome/fontawesome-free-solid/faUserAlt';
 
-import AuthButton from './auth-button';
+import UserButton from './userButton';
 import { logout } from '../../action/user_actions'; 
 import { openCartDialog } from '../../action/dialogs_actions'; 
 import { handleCalculateCartItems } from '../../action/cart_actions'; 
@@ -52,7 +52,7 @@ class Header extends Component {
                             <FontAwesomeIcon icon={faShoppingCart} className="header--icon basket-icon"/>
                             Cart
                         </div>
-                        <AuthButton {...this.props} icon={faUserAlt}/>
+                        <UserButton {...this.props} icon={faUserAlt}/>
                     </div>
                 :   <div className="header--container">
                         <div className="header--basket header-btn">
@@ -74,4 +74,3 @@ const mapDispatchToProps = (state) => ({
 })
 
 export default connect(mapDispatchToProps, { logout, openCartDialog, handleCalculateCartItems })(withRouter(Header));
-//#5489d9

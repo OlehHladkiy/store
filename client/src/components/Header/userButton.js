@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-class AuthButton extends Component {
+class UserButton extends Component {
     state = {
         anchorEl: null,
     };
@@ -18,12 +18,15 @@ class AuthButton extends Component {
     };
 
     handleClickMenuItem = event => {
-        let adress = event.currentTarget.innerText.toLowerCase().split(' ').join('_');
-        if(adress.trim() === 'logout'){
-            this.props.logout();
+        let adress = event.currentTarget.innerText.toLowerCase().split(' ').join('_').trim();
+        if(adress !== 'logout'){
+            this.props.history.push(`/user/${adress}`);    
+            this.handleClose();
         }
+    }
 
-        this.props.history.push(`/user/${adress.trim()}`);    
+    logoutHandler = () => {
+        this.props.logout();
         this.handleClose();
     }
 
@@ -35,7 +38,7 @@ class AuthButton extends Component {
         if(this.props.isFetching !== nextProps.isFetching){
             if(nextProps.isFetching === false){
                 if(nextProps.successLogout){
-                    nextProps.history.push('/');
+                    this.redirectToLogin();
                 }
             }
         }
@@ -64,7 +67,7 @@ class AuthButton extends Component {
                             onClose={this.handleClose}
                         >
                             <MenuItem onClick={this.handleClickMenuItem}>Dashboard</MenuItem>
-                            <MenuItem onClick={this.handleClickMenuItem}>Logout</MenuItem>
+                            <MenuItem onClick={this.logoutHandler}>Logout</MenuItem>
                         </Menu>
                     : null
                 }
@@ -73,4 +76,4 @@ class AuthButton extends Component {
     }
 }
 
-export default AuthButton;
+export default UserButton;
