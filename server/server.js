@@ -146,6 +146,11 @@ app.post('/api/product/shop', (req, res) => {
             findArgs[key] = req.body.filters[key];
         }
     }
+
+    let wholeSizeArticles = 0;
+    Product.find({}).exec((err, articles) => {
+        wholeSizeArticles = articles.length;
+    })
     
     Product.
     find(findArgs).
@@ -159,6 +164,7 @@ app.post('/api/product/shop', (req, res) => {
         res.status(200).json({
             success: true,
             size: articles.length,
+            wholeSize: wholeSizeArticles,
             articles
         })
     })

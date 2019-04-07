@@ -3,7 +3,8 @@ import {
     CART_ITEM_CLEAR,
     AMOUNT_CART_ITEMS,
     GET_CART_ITEMS_BY_ID_SUCCESS,
-    GET_CART_ITEMS_BY_ID_LAUNCHED
+    GET_CART_ITEMS_BY_ID_LAUNCHED,
+    CART_ITEM_DELETE_SUCCESS
 } from '../types/cart_types';
 
 const initState = {
@@ -23,6 +24,8 @@ export default function(state = initState, action){
             return {...state, cartItemsFetching: false, cartArticles: action.cartArticles};
         case AMOUNT_CART_ITEMS:
             return {...state, cartLength: action.length}
+        case CART_ITEM_DELETE_SUCCESS:
+            return {...state, cartItemDeleteSuccess: true}
         default:
             return state;
     }

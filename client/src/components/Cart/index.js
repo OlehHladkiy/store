@@ -23,6 +23,13 @@ class Cart extends Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState){
+        if(Object.keys(prevState.totalValues).length !== Object.keys(this.state.totalValues).length){
+            this.calculateTotal();
+            this.props.getCartItemsById();
+        }
+    }
+
     deleteArticleFromCart = (id) => {
         this.props.deleteFromCart(id);
         let newTotalValues = {...this.state.totalValues};
@@ -30,9 +37,6 @@ class Cart extends Component {
 
         this.setState({
             totalValues: newTotalValues
-        }, () => {
-            this.calculateTotal();
-            this.props.getCartItemsById();
         })
     }
 
@@ -87,7 +91,8 @@ class Cart extends Component {
 
 const mapStateToProps = (state) => ({
     open: state.dialogs.openCartDialogStatus,
-    cartArticles: state.cart.cartArticles
+    cartArticles: state.cart.cartArticles,
+    cartItemDeleteSuccess: state.cart.cartItemDeleteSuccess
 })
 
 export default connect(mapStateToProps, { closeCartDialog, getCartData, deleteFromCart, getCartItemsById })(Cart);

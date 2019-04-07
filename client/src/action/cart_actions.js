@@ -120,20 +120,17 @@ const deleteFromCartHandler = (id) => {
     let newCartItems = [...cartItems.slice(0, index), ...cartItems.slice(index + 1)];
 
     pushDataToLocalSt(newCartItems, CART_ARTICLES);
-
-    return newCartItems;
 }
 
-const deleteFromCartSuccess = (cartArticles) => ({
-    type: CART_ITEM_DELETE_SUCCESS,
-    cartArticles
+const deleteFromCartSuccess = () => ({
+    type: CART_ITEM_DELETE_SUCCESS
 })
 
 export const deleteFromCart = (id) => dispatch => {
-    let newData = deleteFromCartHandler(id);
+    deleteFromCartHandler(id);
     
     dispatch(calculateCartItems());
-    dispatch(deleteFromCartSuccess(newData));
+    dispatch(deleteFromCartSuccess());
 }
 
 const getCartDataSuccess = (cartArticles) => ({

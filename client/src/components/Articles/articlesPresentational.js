@@ -4,7 +4,7 @@ import ListArticle from './listArticle';
 import {withRouter} from 'react-router-dom';
 
 const ArticlesPresentational = (props) => {
-      const {page, rowsPerPage, articles = [], history, prevPage, nextPage} = props;
+      const {page, rowsPerPage, articles = [], history, prevPage, nextPage, wholeSize} = props;
 
       const renderListArticle = () => (
             articles ?
@@ -23,9 +23,9 @@ const ArticlesPresentational = (props) => {
                   <h2>Articles</h2>
                   {renderListArticle()}
                   <div>
-                        <button disabled={page === 0} className="pag-btn left" onClick={() => prevPage()}> > </button>
+                        <button disabled={page === 0} className="pag-btn left" onClick={prevPage}> > </button>
                         <span>{page + 1}</span>
-                        <button disabled={articles.length <= (page + 1) * rowsPerPage} className="pag-btn" onClick={() => nextPage()}> > </button>
+                        <button disabled={Math.ceil(wholeSize / rowsPerPage) === page + 1 } className="pag-btn" onClick={nextPage}> > </button>
                   </div>
             </div>
       )

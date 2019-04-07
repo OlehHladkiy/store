@@ -103,10 +103,11 @@ export const removeArticle = (id, previousData) => async dispatch => {
 
 }
 
-const productsFromServerSuccess = (articles, articlesSize) => ({
+const productsFromServerSuccess = (articles, articlesSize, wholeSize) => ({
     type: PRODUCT_FROM_SERVER_SUCCESS,
     articles,
-    articlesSize
+    articlesSize,
+    wholeSize
 })
 
 const productsFromServerError = (errorMessage) => ({
@@ -133,7 +134,7 @@ export const productsFromServer = (limit, skip, filters, previousData = []) => a
     ]
     
     if(data.success){
-        dispatch(productsFromServerSuccess(newData, data.size));
+        dispatch(productsFromServerSuccess(newData, data.size, data.wholeSize));
     } else {
         dispatch(productsFromServerError(data.err.errmsg));
     }

@@ -37,14 +37,7 @@ class Header extends Component {
                 <div className="header--logo" onClick={this.clickToLogo}>
                     Sport Nutrition
                 </div>
-
-                <div className="header--search">
-                    <TextField
-                        label="Search"
-                        className="header--input"
-                        variant="outlined"
-                    />
-                </div>
+                
                 { this.props.userData ?
                     <div className="header--container">
                         <div className="header--basket header-btn" onClick={this.openCart}>
