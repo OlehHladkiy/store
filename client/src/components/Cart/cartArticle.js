@@ -63,43 +63,36 @@ class CartArticle extends Component {
 
     updateForm = (element) => {
         let newFormData = update(element, this.state.formData);
-        let updateData = generateData(newFormData);
-
-        this.props.updateCart(this.props.article._id, updateData);
-
+        
         this.setState({
             formData: newFormData,
             formError: false
         })
+        this.props.updateCart(this.props.article._id, generateData(newFormData));
     }
 
     componentDidUpdate(prevProps, prevState){
         if(this.state.formData.quantity.value !== prevState.formData.quantity.value ||
-        this.state.formData.packingAndPrice.value !== prevState.formData.packingAndPrice.value){
-            this.changePrice(this.state.formData);
+           this.state.formData.packingAndPrice.value !== prevState.formData.packingAndPrice.value){
+            this.changePrice();
         }
     }
 
     componentDidMount(){
-        let newFormData = {};
         const formDataWithNewTaste = populateOptionFields(this.state.formData, this.props.article.tastes, 'tastes');
-        formDataWithNewTaste.tastes.value = this.props.selectedParameters.tastes;
-
-        const formDataWithNewPacking = populateOptionFields(this.state.formData, this.props.article.packingAndPrice, 'packingAndPrice');
-        formDataWithNewPacking.packingAndPrice.value = this.props.selectedParameters.packingAndPrice;
-        
-        newFormData = {...formDataWithNewTaste, ...formDataWithNewPacking};
+        const newFormData = populateOptionFields(formDataWithNewTaste, this.props.article.packingAndPrice, 'packingAndPrice');
+        newFormData.tastes.value = this.props.selectedParameters.tastes;
+        newFormData.packingAndPrice.value = this.props.selectedParameters.packingAndPrice;
         newFormData.quantity.value = this.props.selectedParameters.quantity;
-        
-        this.changePrice(newFormData);
+
         this.setState({
             formData: newFormData
         })
     }
 
-    changePrice = (newFormData) => {
-        let price = this.findPrice(newFormData);
-        this.props.pushTotalValues({_id: this.props.article._id, price: price * +newFormData.quantity.value});
+    changePrice = () => {
+        let price = this.findPrice(this.state.formData);
+        this.props.pushTotalValues({_id: this.props.article._id, price: price * +this.state.formData.quantity.value});
         this.setState({
             price
         })
@@ -118,21 +111,17 @@ class CartArticle extends Component {
         let formData = {...this.state.formData};
         let newQuantity = {...formData.quantity};
 
-        if(type === 'inc') {
-            ++quantity;
-        } else if(type === 'dec') {
-            --quantity;
-        }
+        quantity = type === "inc" ? ++quantity : --quantity; 
 
         if(quantity <= 0) quantity = 1;
         newQuantity.value = quantity;
         
         formData.quantity = newQuantity;
-        this.props.updateCart(this.props.article._id, generateData(formData));
-
+        
         this.setState({
             formData
         })
+        this.props.updateCart(this.props.article._id, generateData(formData));
     }
 
     render(){

@@ -68,10 +68,9 @@ class ProductBuyDialog extends Component {
     componentWillReceiveProps(nextProps){
         if(this.props.openDialogStatus !== nextProps.openDialogStatus){
             if(nextProps.article){
-                let newFormData = {};
                 const formDataWithNewTaste = populateOptionFields(this.state.formData, nextProps.article.tastes, 'tastes');
-                const formDataWithNewPacking = populateOptionFields(this.state.formData, nextProps.article.packingAndPrice, 'packingAndPrice');
-                newFormData = {...formDataWithNewTaste, ...formDataWithNewPacking};
+                const newFormData = populateOptionFields(formDataWithNewTaste, nextProps.article.packingAndPrice, 'packingAndPrice');
+
                 this.setState({
                     formData: newFormData
                 })

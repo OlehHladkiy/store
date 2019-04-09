@@ -79,6 +79,9 @@ export const populateFields = (formData, dataIn) => {
 
 export const populateOptionFields = (formData, dataIn, field) => {
     const newFormData = {...formData};
+    if(typeof formData[field] === 'object'){
+        newFormData[field] = {...formData[field]};
+    }
     const newArray = dataIn.map(item => {
         let obj = {};
         for(let key in item){

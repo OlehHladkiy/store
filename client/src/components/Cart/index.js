@@ -30,6 +30,14 @@ class Cart extends Component {
         }
     }
 
+    pushTotalValues = (item) => {
+        let obj = {[item._id]: item.price};
+    
+        this.setState((state) => ({
+            totalValues: {...state.totalValues, ...obj}
+        }), this.calculateTotal)
+    }
+
     deleteArticleFromCart = (id) => {
         this.props.deleteFromCart(id);
         let newTotalValues = {...this.state.totalValues};
@@ -37,6 +45,19 @@ class Cart extends Component {
 
         this.setState({
             totalValues: newTotalValues
+        })
+    }
+
+    calculateTotal = () => {
+        let sum = 0;
+        const {totalValues} = this.state;
+
+        for(let key in totalValues){
+            sum += +totalValues[key];
+        }
+        
+        this.setState({
+            total: sum
         })
     }
 
@@ -54,27 +75,6 @@ class Cart extends Component {
             Your cart is empty
           </div>
     )
-
-    pushTotalValues = (item) => {
-        let obj = {[item._id]: item.price};
-    
-        this.setState((state) => ({
-            totalValues: {...state.totalValues, ...obj}
-        }), this.calculateTotal)
-    }
-
-    calculateTotal = () => {
-        let sum = 0;
-        const {totalValues} = this.state;
-
-        for(let key in totalValues){
-            sum += +totalValues[key];
-        }
-        
-        this.setState({
-            total: sum
-        })
-    }
 
     render() {
         return (
