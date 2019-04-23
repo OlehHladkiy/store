@@ -1,32 +1,36 @@
-import { 
-    CART_ITEM_ADD_SUCCESS, 
-    CART_ITEM_CLEAR,
-    AMOUNT_CART_ITEMS,
-    GET_CART_ITEMS_BY_ID_SUCCESS,
-    GET_CART_ITEMS_BY_ID_LAUNCHED,
-    CART_ITEM_DELETE_SUCCESS
-} from '../types/cart_types';
+import {
+  CART_ITEM_ADD_SUCCESS,
+  CART_ITEM_CLEAR,
+  AMOUNT_CART_ITEMS,
+  GET_CART_ITEMS_BY_ID_SUCCESS,
+  GET_CART_ITEMS_BY_ID_LAUNCHED,
+  CART_ITEM_DELETE_SUCCESS
+} from "../types/cart_types";
 
 const initState = {
-    addedToCartItem: "",
-    cartArticles: [],
-}
+  addedToCartItem: "",
+  cartArticles: []
+};
 
-export default function(state = initState, action){
-    switch(action.type){
-        case CART_ITEM_ADD_SUCCESS:
-            return {...state, addedToCartItem: action.articleId};
-        case CART_ITEM_CLEAR:
-            return {...state, addedToCartItem: ""};
-        case GET_CART_ITEMS_BY_ID_LAUNCHED:
-            return {...state, cartItemsFetching: true};
-        case GET_CART_ITEMS_BY_ID_SUCCESS:
-            return {...state, cartItemsFetching: false, cartArticles: action.cartArticles};
-        case AMOUNT_CART_ITEMS:
-            return {...state, cartLength: action.length}
-        case CART_ITEM_DELETE_SUCCESS:
-            return {...state, cartItemDeleteSuccess: true}
-        default:
-            return state;
-    }
+export default function(state = initState, action) {
+  switch (action.type) {
+    case CART_ITEM_ADD_SUCCESS:
+      return { ...state, addedToCartItem: action.articleId };
+    case CART_ITEM_CLEAR:
+      return { ...state, addedToCartItem: "" };
+    case GET_CART_ITEMS_BY_ID_LAUNCHED:
+      return { ...state, cartItemsFetching: true };
+    case GET_CART_ITEMS_BY_ID_SUCCESS:
+      return {
+        ...state,
+        cartItemsFetching: false,
+        cartArticles: action.cartArticles
+      };
+    case AMOUNT_CART_ITEMS:
+      return { ...state, cartLength: action.length };
+    case CART_ITEM_DELETE_SUCCESS:
+      return { ...state, cartItemDeleteSuccess: true };
+    default:
+      return state;
+  }
 }

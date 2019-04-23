@@ -1,15 +1,15 @@
-import React from 'react';
-import Header from '../components/Header';
-import Cart from '../components/Cart';
+import React from "react";
+import Header from "../components/Header";
+import Cart from "../components/Cart";
 
-const Layout = (props) => {
-    return (
-        <div>
-            <Header/>
-            {props.children}
-            <Cart/>
-        </div>
-    );
-}
+const Layout = props => {
+  return (
+    <div>
+      <Header />
+      {props.children}
+      <Cart />
+    </div>
+  );
+};
 
 export default Layout;
